@@ -1,6 +1,6 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import Profil from './Profil';
+import React from "react";
+import { Link } from "react-router-dom";
+import Profil from "./Profil";
 const Profilbar = ({
   displayProfilBar,
   Logout,
@@ -11,16 +11,16 @@ const Profilbar = ({
 }) => {
   return (
     <div
-      className='row'
+      className="row"
       style={{
-        transition: 'ease-in-out 0.5s',
-        height: `${displayProfilBar ? '90%' : '0'}`,
-        position: 'relative',
-        background: 'whitesmoke',
+        transition: "ease-in-out 0.5s",
+        height: `${displayProfilBar ? "100%" : "0"}`,
+        position: "relative",
+        background: "whitesmoke",
         zIndex: 10,
-        display: 'flex',
-        flexDirection: 'column',
-        top: `${displayProfilBar ? '0' : '-150%'}`,
+        display: "flex",
+        flexDirection: "column",
+        top: `${displayProfilBar ? "0" : "-150%"}`,
       }}
     >
       <Profil
@@ -31,34 +31,34 @@ const Profilbar = ({
       />
       <div
         style={{
-          height: '10%',
-          display: 'flex',
-          justifyContent: 'center',
+          height: "10%",
+          display: "flex",
+          justifyContent: "center",
         }}
       >
-        {sessionStorage.getItem('user') !== undefined ? (
+        {sessionStorage.getItem("user") !== undefined ? (
           <div
             style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
-            <h4>{sessionStorage.getItem('user')}</h4>
+            <h4>{sessionStorage.getItem("user")}</h4>
           </div>
         ) : (
-          ''
+          ""
         )}
       </div>
-      <div className='settings'></div>
-
-      <div className='logout'>
+      <div className="settings"></div>
+      <div className="logout">
         <Link
-          to='/sign-in'
-          className='fas fa-power-off'
+          to="/sign-in"
+          className="fas fa-sign-out-alt"
           onClick={Logout}
         ></Link>
+        Se deconnecter
       </div>
     </div>
   );

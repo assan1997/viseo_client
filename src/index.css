@@ -1,13 +1,13 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 .App {
@@ -17,7 +17,7 @@ code {
   width: 100%;
   position: relative;
   overflow: hidden;
-  font-family: 'Segoe UI', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans',
+  font-family: "Lato", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans",
     Arial, sans-serif;
 }
 .overlay {
@@ -65,7 +65,7 @@ code {
   color: silver;
 }
 .finder_zone input {
-  width: '100%';
+  width: "100%";
   height: 40px;
   padding: 15px;
   padding-left: 35px;
@@ -103,7 +103,7 @@ code {
   box-shadow: 0 15px 20px 0 rgba(0, 0, 0, 0.11),
     0 5px 10px 0 rgba(0, 0, 0, 0.08);
   text-align: center;
-  transition: 'opacity' 0.3s;
+  transition: "opacity" 0.3s;
 }
 .profil_zone_avatar {
   height: 70px;
@@ -120,6 +120,25 @@ code {
 }
 .callboard {
   background: rgba(85, 85, 85, 0.904);
+}
+.callbard-control {
+  color: silver;
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 15px 20px 0 rgba(0, 0, 0, 0.11),
+    0 5px 10px 0 rgba(0, 0, 0, 0.08);
+}
+
+.callbard-control > h3 {
+}
+.callbard-control > h3 i {
+  font-size: 0.8em;
+  color: red;
+}
+.callbard-control button {
+  padding: 15px;
+  border-radius: 100px;
 }
 .contact_avatar {
   height: 50px;
@@ -180,7 +199,7 @@ code {
   overflow: auto;
   scrollbar-width: 0;
   height: 70%;
-  position: 'absolute';
+  position: "absolute";
 
   padding-bottom: 15px;
 }
@@ -268,7 +287,7 @@ code {
 }
 .contact_zone_options_1::before,
 .contact_zone_options_2::before {
-  content: ' ';
+  content: " ";
   background: skyblue;
   height: 2px;
   width: 50%;
@@ -281,7 +300,7 @@ code {
   outline: none;
 }
 .contact_zone_options .btn {
-  color: '#95939d';
+  color: "#95939d";
 }
 
 .chatitem-color-away {
@@ -349,7 +368,7 @@ code {
   visibility: hidden;
 }
 .chatitem-home::after {
-  content: ' ';
+  content: " ";
   position: absolute;
   right: -8px;
   top: 0px;
@@ -360,7 +379,7 @@ code {
   border-bottom: 8px solid transparent;
 }
 .chatitem-away::before {
-  content: ' ';
+  content: " ";
   position: absolute;
   left: -8px;
   top: 0px;
@@ -403,14 +422,64 @@ code {
 }
 .ctrboard {
   display: flex;
-  justify-content: center;
-  align-items: stretch;
-  padding: 20px;
-  background: tranparent;
-  width: 20%;
+  justify-content: space-between;
+  padding: 25px;
+  background: white;
   opacity: 0.7;
   box-shadow: 0 15px 20px 0 rgba(0, 0, 0, 0.11),
     0 20px 10px 0 rgba(0, 0, 0, 0.08);
+  border-radius: 5px;
+}
+.ctrboard-speakers {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+.ctrboard-speakers .icons {
+  padding: 20px;
+  height: 25px;
+  width: 25px;
+  border-radius: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 15px 20px 0 rgba(0, 0, 0, 0.11),
+    0 20px 10px 0 rgba(0, 0, 0, 0.08);
+  background: whitesmoke;
+  cursor: pointer;
+}
+
+.ctrboard .endbutton {
+  width: 65px;
+  height: 65px;
+  margin: 0 auto;
+  background: red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  border-radius: 100px;
+  box-shadow: 0 15px 20px 0 rgba(0, 0, 0, 0.11),
+    0 20px 10px 0 rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+}
+.endbuttonImage {
+  width: 40px;
+  height: 40px;
+}
+.toggle-video {
+  padding: 20px;
+  height: 25px;
+  width: 25px;
+  border-radius: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 15px 20px 0 rgba(0, 0, 0, 0.11),
+    0 20px 10px 0 rgba(0, 0, 0, 0.08);
+  background: whitesmoke;
+  cursor: pointer;
 }
 .settings {
   height: 45%;
