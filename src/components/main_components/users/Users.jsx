@@ -1,6 +1,6 @@
-import React from 'react';
-import './UserItem';
-import UserItem from './UserItem';
+import React from "react";
+import "./UserItem";
+import UserItem from "./UserItem";
 const Users = ({
   users,
   add,
@@ -10,7 +10,10 @@ const Users = ({
   onCurrentUser,
 }) => {
   return (
-    <div className='col-12 ' style={{ height: '25%' }}>
+    <div
+      className="col-12"
+      style={{ height: "10%", backgroundColor: "silver" }}
+    >
       {users.map((user) => (
         <UserItem
           key={user._id}
