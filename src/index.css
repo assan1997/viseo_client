@@ -1,23 +1,23 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 .App {
-  background: rgba(215, 233, 241, 0.959);
+  background: rgba(220, 234, 240, 0.959);
   background-size: cover;
   height: 100vh;
   width: 100%;
   position: relative;
   overflow: hidden;
-  font-family: "Lato", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans",
+  font-family: 'roboto', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans',
     Arial, sans-serif;
 }
 .overlay {
@@ -57,37 +57,55 @@ code {
 }
 
 .finder_zone {
-  padding-top: 18px;
-  width: 100%;
   position: relative;
 }
-.finder_zone i {
+.finder_zone .i {
   color: silver;
-}
-.finder_zone input {
-  width: "100%";
-  height: 40px;
-  padding: 15px;
-  padding-left: 35px;
-  border-radius: 100px;
-  outline: none;
-  border: none;
-  background: #fff;
-  color: #000;
-  font-weight: lighter;
-}
-.finder_zone i {
   position: absolute;
   left: 30px;
   top: 30px;
 }
+.finder_zone input {
+  outline: none;
+  border: none;
+  background: rgb(227, 241, 247);
+  color: #000;
+  font-weight: lighter;
+}
 .finder_zone input:focus {
   outline: none;
+}
+.none {
+  display: none;
+}
+.block {
+  display: block;
+  transition: opacity ease-in-out 0.5s;
+  opacity: 1;
+}
+.searchplaceholder {
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+}
+.searchplaceholder-background {
+  background-color: whitesmoke;
+}
+.item {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  cursor: pointer;
+}
+.item:nth-child(1) {
+  color: silver;
+}
+.item:nth-child(2) {
+  font-size: 0.8em;
 }
 .contactZone {
   height: 100%;
   background: white;
-
   position: relative;
 }
 .chatZone {
@@ -103,7 +121,7 @@ code {
   box-shadow: 0 15px 20px 0 rgba(0, 0, 0, 0.11),
     0 5px 10px 0 rgba(0, 0, 0, 0.08);
   text-align: center;
-  transition: "opacity" 0.3s;
+  transition: 'opacity' 0.3s;
 }
 .profil_zone_avatar {
   height: 70px;
@@ -199,7 +217,8 @@ code {
   overflow: auto;
   scrollbar-width: 0;
   height: 70%;
-  position: "absolute";
+  position: 'absolute';
+  background-color: yellow;
 
   padding-bottom: 15px;
 }
@@ -287,11 +306,12 @@ code {
 }
 .contact_zone_options_1::before,
 .contact_zone_options_2::before {
-  content: " ";
-  background: skyblue;
-  height: 2px;
-  width: 50%;
   position: absolute;
+  content: ' ';
+  background: skyblue;
+  height: 6px;
+  width: 6px;
+  margin-left: 25%;
   border-radius: 150px;
   top: 100%;
 }
@@ -300,14 +320,14 @@ code {
   outline: none;
 }
 .contact_zone_options .btn {
-  color: "#95939d";
+  color: '#95939d';
 }
 
 .chatitem-color-away {
   background: white;
 }
 .chatitem-color-home {
-  background: #dcf8c6;
+  background: rgb(183, 225, 241);
 }
 .chatitem-away {
   float: left;
@@ -367,19 +387,20 @@ code {
 .is_hidden {
   visibility: hidden;
 }
+
 .chatitem-home::after {
-  content: " ";
+  content: ' ';
   position: absolute;
   right: -8px;
   top: 0px;
   display: inline-block;
   border-top: 0 solid transparent;
-  border-left: 8px solid #dcf8c6;
-  border-right: 0 solid #dcf8c6;
+  border-left: 8px solid rgb(183, 225, 241);
+  border-right: 0 solid rgb(183, 225, 241);
   border-bottom: 8px solid transparent;
 }
 .chatitem-away::before {
-  content: " ";
+  content: ' ';
   position: absolute;
   left: -8px;
   top: 0px;
@@ -401,7 +422,6 @@ code {
   background: rgba(197, 228, 240, 0.952);
 }
 .logout {
-  box-shadow: 0 15px 20px 0 rgba(0, 0, 0, 0.11) 0 5px 10px 0 rgba(0, 0, 0, 0.08);
   height: 10%;
   width: 100%;
   display: flex;
@@ -410,13 +430,13 @@ code {
   position: absolute;
   bottom: 0;
   background: white;
+  box-shadow: 0 15px 20px 0 rgba(0, 0, 0, 0.11) 0 5px 10px 0 rgba(0, 0, 0, 0.08);
 }
 
-.logout .fa-power-off {
-  background: rgba(166, 75, 240, 0.952);
+.logout .link {
   padding: 10px;
   border-radius: 100px;
-  color: gainsboro;
+  color: red;
   cursor: pointer;
   text-decoration: none;
 }

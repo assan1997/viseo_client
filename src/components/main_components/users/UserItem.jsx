@@ -9,98 +9,26 @@ const UserItem = ({ user, changeZone, onAddContact }) => {
     }`;
   }
   return (
-    <div
-      className='col-12 user_zone'
-      style={{
-        cursor: 'pointer',
-        background: 'transparent',
-        border: 'none',
-        outline: 'none',
-      }}
-      onClick={changeZone}
-      id={
-        user !== undefined || user.item !== undefined
-          ? user._id || user.user._id
-          : ''
-      }
-    >
-      <div className='row'>
-        <div className='col-12 '>
-          <div className='row'>
-            <div className=' col-2  col-md-2'>
-              <span className='chatZoneImg'>
-                <img
-                  className='rounded-circle'
-                  src={`${
-                    user.profil !== undefined
-                      ? `http://localhost:4000/ressources/${user.profil}`
-                      : user.user !== undefined
-                      ? `http://localhost:4000/ressources/${user.user.profil}`
-                      : ''
-                  }`}
-                  alt=''
-                />
-              </span>
-            </div>{' '}
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-              }}
-              className='col-sm-4 col-md-6  col-lg-4 col-5 '
-            >
-              <h5 style={{ color: 'gray', fontSize: '0.9em' }}>
-                {user.login || user.user.login}
-              </h5>
-              <p style={{ fontSize: '0.7em', color: 'gray' }}></p>
+    <div className='row h-100'>
+      <div
+        className='col-2 h-100 avatar'
+        style={{ backgroundColor: 'orange' }}
+      ></div>
+      <div
+        className='col-10 h-100 main-text'
+        style={{ backgroundColor: 'blue' }}
+      >
+        <div className='row h-100'>
+          <div className='col-9 h-100' style={{ backgroundColor: 'blue' }}>
+            <div className='row h-100'>
+              <div className='col-12'></div>
+              <div className='col-12'></div>
             </div>
-            {user.item !== undefined && (
-              <div
-                className='col-5 col-md-6'
-                style={{
-                  textAlign: 'left',
-                }}
-              >
-                <p
-                  style={{
-                    fontSize: '0.8em',
-                    color: 'gray',
-                    position: 'relative',
-                    top: '25%',
-                  }}
-                >
-                  {lastMessage !== null
-                    ? lastMessage.length > 25
-                      ? `${lastMessage.split('').splice(0, 25).join('')} ...`
-                      : lastMessage
-                    : ''}
-                </p>
-              </div>
-            )}
-            {onAddContact !== null && (
-              <div
-                className='col-md-5 col-lg-4 col-5'
-                style={{
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                  alignItems: 'center',
-                }}
-              >
-                <button
-                  className='btn btn-info btn-sm my-1'
-                  onClick={onAddContact}
-                  id={`${user._id}`}
-                  style={{ color: '#000' }}
-                >
-                  <i className=' fas fa-plus'></i>
-                </button>
-              </div>
-            )}
           </div>
+          <div className='col-3' style={{ backgroundColor: 'purple' }}></div>
         </div>
       </div>
-      <hr />
+      <div className='plus'></div>
     </div>
   );
 };

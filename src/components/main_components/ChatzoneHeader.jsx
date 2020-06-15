@@ -1,5 +1,5 @@
 import React from 'react';
-
+import VideocamOutlinedIcon from '@material-ui/icons/VideocamOutlined';
 const ChatzoneHeader = ({ changeZone, currentUser, onCall }) => {
   return (
     <div className='row h-100'>
@@ -68,7 +68,7 @@ const ChatzoneHeader = ({ changeZone, currentUser, onCall }) => {
                     : true
                 }
               >
-                <i className='fas fa-video'></i>
+                <VideocamOutlinedIcon />
               </button>
             </li>
           </ul>

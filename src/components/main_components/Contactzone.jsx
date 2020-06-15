@@ -1,6 +1,10 @@
 import React from 'react';
 import Users from './users/Users';
 import Messagelist from './Messagelist';
+import ContactsIcon from '@material-ui/icons/Contacts';
+import ChatIcon from '@material-ui/icons/Chat';
+import SearchOutlinedIcon from '@material-ui/icons/SearchOutlined';
+import ArrowBackOutlinedIcon from '@material-ui/icons/ArrowBackOutlined';
 const Contactzone = ({
   usersFilter,
   findUser,
@@ -14,6 +18,9 @@ const Contactzone = ({
   onDisplayContact,
   displayMessage,
   messages,
+  inputFocus,
+  onToggleFocus,
+  searchInputRef,
 }) => {
   return (
     <div
@@ -22,37 +29,56 @@ const Contactzone = ({
       } d-md-block`}
     >
       <div className='row h-100 ' style={{ position: 'relative' }}>
-        <div className='col-12 '>
+        <div className='col-12 ' style={{ height: '10%' }}>
           <div className='row h-100'>
-            <div className='col-12 finder_zone'>
-              <input
-                className='form-control'
-                onKeyUp={findUser}
-                type='text'
-                name=''
-                placeholder='Rechercher un utilisateur'
-              />
-              <i className='fas fa-search'></i>
-              <hr />
+            <div
+              className={`col-12 finder_zone ${inputFocus ? 'block' : 'none'}`}
+            >
+              <div className='row h-100'>
+                <div className='col-1 item' onClick={onToggleFocus}>
+                  <ArrowBackOutlinedIcon />
+                </div>
+                <div className='col-10 item'>
+                  <input
+                    className='form-control'
+                    onKeyUp={findUser}
+                    type='text'
+                    name=''
+                    placeholder=''
+                    autoFocus
+                    ref={searchInputRef}
+                  />
+                </div>
+              </div>
             </div>
-
-            <div className='col-12 w-100'>
-              {usersFilter.length === 0 ? (
-                ''
-              ) : (
-                <p
-                  className='row alert alert-info'
-                  style={{ borderRadius: '0' }}
-                >
-                  {contactExist === null
-                    ? usersFilter.length === 1
-                      ? `${usersFilter.length} utilisateur trouvé`
-                      : `${usersFilter.length} utilisateurs trouvés`
-                    : contactExist}
-                </p>
-              )}
+            <div
+              className={`col-12 searchplaceholder' ${
+                inputFocus ? 'none' : 'block'
+              }`}
+              onClick={onToggleFocus}
+            >
+              <div className='row h-100 searchplaceholder-background'>
+                <div className='col-2 item'>
+                  <SearchOutlinedIcon />
+                </div>
+                <div className='col-8 item'>Rechercher un utilisateur</div>
+                <div className='col-2 item'></div>
+              </div>
             </div>
           </div>
+        </div>
+        <div className='col-12 w-100'>
+          {usersFilter.length === 0 ? (
+            ''
+          ) : (
+            <p className='row alert alert-info' style={{ borderRadius: '0' }}>
+              {contactExist === null
+                ? usersFilter.length === 1
+                  ? `${usersFilter.length} utilisateur trouvé`
+                  : `${usersFilter.length} utilisateurs trouvés`
+                : contactExist}
+            </p>
+          )}
         </div>
         <div className='col-12 contact_zone_options'>
           <button
@@ -61,7 +87,9 @@ const Contactzone = ({
               displayMessage ? '' : 'contact_zone_options_1'
             }`}
           >
-            Contacts
+            <ContactsIcon style={{ color: 'skyblue' }} />
+
+            <span style={{ fontSize: '0.8em' }}>Contacts</span>
           </button>
           <button
             onClick={onDisplayMessage}
@@ -69,10 +97,11 @@ const Contactzone = ({
               displayMessage ? 'contact_zone_options_2' : ''
             }`}
           >
-            Messages
+            <ChatIcon style={{ color: 'skyblue' }} />
+            <span style={{ fontSize: '0.8em' }}>Messages</span>
           </button>
         </div>
-        <div className='col-12  contactList '>
+        <div className='col-12  contactList  '>
           <div
             className='row w-100'
             style={{
@@ -96,7 +125,7 @@ const Contactzone = ({
             />
           </div>
           <div
-            className='row h-100 w-100'
+            className='row w-100'
             style={{
               position: 'absolute',
               transition: 'all ease-in-out .5s',
