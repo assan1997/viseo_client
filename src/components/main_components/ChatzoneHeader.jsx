@@ -1,6 +1,13 @@
 import React from 'react';
 import VideocamOutlinedIcon from '@material-ui/icons/VideocamOutlined';
 const ChatzoneHeader = ({ changeZone, currentUser, onCall }) => {
+  let user;
+  if (currentUser.emitter && currentUser.receiver) {
+    user = { ...currentUser };
+    user.emitter._id === sessionStorage.getItem('userId')
+      ? (user.emitter = null)
+      : (user.receiver = null);
+  }
   return (
     <div className='row h-100'>
       <nav
@@ -12,11 +19,11 @@ const ChatzoneHeader = ({ changeZone, currentUser, onCall }) => {
             <i style={{ color: 'black' }} className='fas fa-arrow-left'></i>
           </button>
           <span className='chatZoneImg'>
-            {currentUser !== undefined && currentUser.user !== undefined && (
+            {currentUser !== undefined && (
               <img
                 src={`${
-                  currentUser.user.profil !== undefined
-                    ? `http://localhost:4000/ressources/${currentUser.user.profil}`
+                  currentUser.profil !== undefined
+                    ? `http://localhost:4000/ressources/${currentUser.profil}`
                     : ''
                 }`}
                 alt=''
@@ -26,8 +33,10 @@ const ChatzoneHeader = ({ changeZone, currentUser, onCall }) => {
           &nbsp;
           <span className='chatZoneText'>
             {currentUser !== undefined
-              ? currentUser.user
-                ? currentUser.user.login
+              ? currentUser.emitter !== undefined
+                ? user.emitter !== null
+                  ? user.emitter.login
+                  : user.receiver.login
                 : currentUser.login
               : ''}
           </span>
@@ -57,8 +66,10 @@ const ChatzoneHeader = ({ changeZone, currentUser, onCall }) => {
                 }}
                 className='nav-link'
                 id={`${
-                  (currentUser !== undefined && currentUser._id) ||
-                  (currentUser.user !== undefined && currentUser.user._id)
+                  currentUser.emitter !== undefined
+                    ? (user.emitter !== null && user.emitter._id) ||
+                      (user.receiver !== null && user.receiver._id)
+                    : currentUser._id
                 }`}
                 onClick={onCall}
                 disabled={

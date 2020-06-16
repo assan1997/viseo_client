@@ -10,7 +10,11 @@ const ChatItems = ({ message, onDeleteMessage }) => {
       {displayOptions && (
         <div className='overlay' onClick={() => setDisplayOptions(false)}></div>
       )}
-      <div
+
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <Moment fromNow>{message.date}</Moment>
+      </div>
+      {/*  <div
         className={`${message.msg_type === 'send' ? 'offset-3 ' : ''} col-9`}
         style={{ marginBottom: '20px' }}
       >
@@ -149,7 +153,7 @@ const ChatItems = ({ message, onDeleteMessage }) => {
             )}
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -10,12 +10,12 @@ const Chatzonebody = ({ currentUser, onDeleteMessage }) => {
     <div className='row h-100'>
       <div className='col-12' style={{ position: 'absolute' }}>
         {currentUser !== undefined &&
-          currentUser.item !== undefined &&
-          currentUser.item.body.map((message, index) => (
+          currentUser.emitter !== undefined &&
+          currentUser.messageGroup.map((message, index) => (
             <ChatItems
               key={message._id}
               message={message}
-              user={currentUser.user}
+              user={currentUser}
               me={me}
               onDeleteMessage={onDeleteMessage}
             />
