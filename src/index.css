@@ -98,7 +98,7 @@ code {
   cursor: pointer;
 }
 .item:nth-child(1) {
-  color: silver;
+  color: silver; 
 }
 .item:nth-child(2) {
   font-size: 0.8em;
@@ -504,6 +504,13 @@ code {
     rgba(0, 0, 0, 0.08);
   background-color: gray;
 }
+.chatDate {
+  background: rgb(208, 233, 243);
+  position: relative;
+  padding: 5px;
+  border-radius: 3px;
+}
+
 ::-webkit-scrollbar {
   display: none;
 }

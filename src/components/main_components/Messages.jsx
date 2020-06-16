@@ -1,7 +1,7 @@
-import React from 'react';
-import UserItem from './users/UserItem';
+import React from "react";
+import UserItem from "./users/UserItem";
 const Messages = ({
-  users,
+  messages,
   add,
   onAddContact,
   onCall,
@@ -9,12 +9,15 @@ const Messages = ({
   onCurrentUser,
 }) => {
   return (
-    <div className='col-12'>
-      <div className='row'>
-        {users.map((user) => (
+    <div
+      className="col-12"
+      style={{ height: "70px", backgroundColor: "whitesmoke" }}
+    >
+      {messages.length !== 0 &&
+        messages.map((message) => (
           <UserItem
-            key={user.item._id}
-            user={user}
+            key={message._id}
+            message={message}
             add={add}
             onAddContact={onAddContact}
             onCall={onCall}
@@ -22,7 +25,6 @@ const Messages = ({
             onCurrentUser={onCurrentUser}
           />
         ))}
-      </div>
     </div>
   );
 };

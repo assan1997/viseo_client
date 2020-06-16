@@ -6,6 +6,7 @@ const Navbar = ({ onToggleProfilBar }) => {
         <div className="navbar-brand"></div>
         <div className="">
           <ul className="navbar nav">
+            <li className="nav-item">{sessionStorage.getItem("user")}</li>&nbsp;
             <li className="nav-item">
               <div onClick={onToggleProfilBar} className="toggle-button">
                 <i

@@ -1,6 +1,6 @@
-import React from 'react';
-import './UserItem';
-import UserItem from './UserItem';
+import React from "react";
+import "./UserItem";
+import UserItem from "./UserItem";
 const Users = ({
   users,
   add,
@@ -11,8 +11,8 @@ const Users = ({
 }) => {
   return (
     <div
-      className='col-12'
-      style={{ height: '60px', backgroundColor: 'whitesmoke' }}
+      className="col-12"
+      style={{ height: "60px", backgroundColor: "whitesmoke" }}
     >
       {users.map((user) => (
         <UserItem

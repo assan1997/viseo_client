@@ -1,14 +1,18 @@
-import React from 'react';
-import Messages from './Messages';
+import React from "react";
+import Messages from "./Messages";
 const Messagelist = ({ messages, onCall, onAddContact, changeZone }) => {
   return (
-    <div className='col-12 messageList h-100'>
-      {/*  <Messages
-        users={messages}
-        onCall={onCall}
-        onAddContact={onAddContact}
-        changeZone={changeZone}
-      /> */}
+    <div className="col-12 ">
+      {
+        <div className="row">
+          <Messages
+            messages={messages}
+            onCall={onCall}
+            onAddContact={onAddContact}
+            changeZone={changeZone}
+          />
+        </div>
+      }
     </div>
   );
 };

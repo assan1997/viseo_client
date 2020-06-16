@@ -1,17 +1,17 @@
-import React from 'react';
-import ChatItems from './ChatItems';
+import React from "react";
+import ChatItems from "./ChatItems";
 
 const Chatzonebody = ({ currentUser, onDeleteMessage }) => {
   const me = {
-    login: sessionStorage.getItem('user'),
-    profil: sessionStorage.getItem('profil'),
+    login: sessionStorage.getItem("user"),
+    profil: sessionStorage.getItem("profil"),
   };
   return (
-    <div className='row h-100'>
-      <div className='col-12' style={{ position: 'absolute' }}>
-        {currentUser !== undefined &&
-          currentUser.emitter !== undefined &&
-          currentUser.messageGroup.map((message, index) => (
+    <div className="row h-100">
+      <div className="col-12" style={{ position: "absolute" }}>
+        {currentUser.length !== 0 &&
+          currentUser[0].emitter !== undefined &&
+          currentUser[0].messageGroup.map((message, index) => (
             <ChatItems
               key={message._id}
               message={message}
