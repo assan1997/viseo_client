@@ -8,7 +8,10 @@ const Chatzonebody = ({ currentUser, onDeleteMessage }) => {
   };
   return (
     <div className="row h-100">
-      <div className="col-12" style={{ position: "absolute" }}>
+      <div
+        className="col-12 col-xl-8 offset-xl-2"
+        style={{ position: "absolute" }}
+      >
         {currentUser.length !== 0 &&
           currentUser[0].emitter !== undefined &&
           currentUser[0].messageGroup.map((message, index) => (

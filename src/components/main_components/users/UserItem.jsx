@@ -90,7 +90,7 @@ const UserItem = ({ user, message, changeZone, onAddContact }) => {
               moment(lastContentTime).format("Do MMM  YYYY ") ===
                 moment(new Date()).format("Do MMM  YYYY ")
                 ? moment(lastContentTime).format("LT")
-                : moment(lastContentTime).add(10, "days").calendar()}
+                : moment(lastContentTime).format("L")}
             </div>
           )}
 

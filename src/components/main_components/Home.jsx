@@ -67,6 +67,7 @@ const Home = () => {
   const [videoStreamClone, setVideoStreamClone] = useState(false);
   const [videoTrackClone, setVideoTrackClone] = useState();
   const [callSession, setCallSession] = useState(false);
+  const [notifMessage, setNotifMessage] = useState();
 
   // CE GROUPE D'EFFET PERMET L'INITIALISATION DES DONNEES
   // APPELS A l'API
@@ -169,9 +170,8 @@ const Home = () => {
     setEnd(true);
   });
   socket.on("updateMessages", function (data) {
-    setMessages(data);
+    setNotifMessage(data);
   });
-
   useEffect(() => {
     if (peerSignal === undefined) setPeerSignal(transmission);
   }, [peerSignal, transmission]);
@@ -219,6 +219,31 @@ const Home = () => {
   useEffect(() => {
     mute ? (v2Ref.current.muted = true) : (v2Ref.current.muted = false);
   }, [mute]);
+
+  useEffect(() => {
+    if (notifMessage !== undefined) {
+      let chat = messages.find(
+        (m) =>
+          notifMessage.header.emitter === m.emitter._id ||
+          notifMessage.header.receiver === m.receiver._id ||
+          notifMessage.header.emitter === m.receiver._id ||
+          notifMessage.header.receiver === m.emitter._id
+      );
+      let chatIndex = messages.findIndex(
+        (m) =>
+          notifMessage.header.emitter === m.emitter._id ||
+          notifMessage.header.receiver === m.receiver._id ||
+          notifMessage.header.emitter === m.receiver._id ||
+          notifMessage.header.receiver === m.emitter._id
+      );
+      console.log(chatIndex);
+      chat.messageGroup[chat.messageGroup.length - 1].body.push(
+        notifMessage.body
+      );
+      let messagesUpdated = messages.splice(chatIndex, 1, chat);
+      setMessages(messagesUpdated);
+    }
+  }, [notifMessage]);
   /* 
   useEffect(() => {
     if (currentUser.length !== 1) {
@@ -244,10 +269,11 @@ const Home = () => {
    * @param {} type  ce parametre permet de mettre le parametre iniator a (true ou false)
    * @param {} stream  ce parametre transmet le stream de l'utilisateur dans simple-peer
    */
-  function InitPeer(type) {
+  function InitPeer(type, stream) {
     let peer = new Peer({
       initiator: type,
       trickle: false,
+      stream: stream,
     });
     return peer;
   }
@@ -269,13 +295,7 @@ const Home = () => {
         setCallBoard(true);
         v1Ref.current.srcObject = stream;
         v1Ref.current.muted = true;
-        let peer = InitPeer(true);
-        var track = stream.getVideoTracks()[0];
-        setVideoTrack(track);
-        setVideoTrackClone(track.clone());
-        setVideoTrackStream(stream);
-        setVideoStreamClone(stream);
-        peer.addTrack(track, stream);
+        let peer = InitPeer(true, stream);
         peer.on("signal", function (data) {
           callData.signal = data;
           if (!callSession) {
@@ -310,9 +330,7 @@ const Home = () => {
         setCallBoard(true);
         v1Ref.current.srcObject = stream;
         v1Ref.current.muted = true;
-        let peer = InitPeer(false);
-        var track = stream.getVideoTracks()[0];
-        peer.addTrack(track, stream);
+        let peer = InitPeer(false, stream);
         peer.on("signal", function (data) {
           let callData = {
             signal: data,
@@ -462,7 +480,7 @@ const Home = () => {
           : "",
       },
       content: messageContent,
-      created_at: new Date(),
+      time: new Date(),
     };
     socket.emit("sendMessage", message);
     setMessageContent("");
@@ -564,18 +582,19 @@ const Home = () => {
             searchInputRef={searchInputRef}
           />
           <div
-            className={`chatZone col-xs-12 col-md-7 col-lg-9 ${
-              toggleZone ? "" : "d-none"
-            } d-md-block`}
+            className={`chatZone col-xs-12 col-md-7 ${
+              displayProfilBar ? "col-xl-7" : "col-xl-10"
+            }  ${toggleZone ? "" : "d-none"} d-md-block`}
           >
             <div className="row h-100">
-              <div className="col-12 col-md-8">
+              <div className="col-12 ">
                 <div className="row h-100">
                   <div className="col-12" style={{ height: "10%" }}>
                     <ChatzoneHeader
                       changeZone={exitChatZone}
                       currentUser={currentUser}
                       onCall={call}
+                      onToggleProfilBar={toggleProfilBar}
                     />
                   </div>
                   <div
@@ -589,22 +608,6 @@ const Home = () => {
                       background: "#ECE5DD",
                     }}
                   >
-                    <h6
-                      style={{
-                        textAlign: "center",
-                        fontStyle: "oblique",
-                        fontSize: "0.7em",
-                        color: "gray",
-                      }}
-                      className=""
-                    >
-                      {currentUser !== undefined &&
-                      currentUser.user !== undefined
-                        ? `conversation avec ${currentUser.user.login}`
-                        : currentUser.login
-                        ? `conversation avec ${currentUser.login}`
-                        : ""}
-                    </h6>
                     <Chatzonebody
                       currentUser={currentUser}
                       onDisplayOptions={displayOptions}
@@ -628,37 +631,17 @@ const Home = () => {
                   </div>
                 </div>
               </div>
-              <div
-                className="d-none d-md-block col-md-4"
-                style={{
-                  height: "100%",
-                }}
-              >
-                <div className="col-12" style={{ height: "10%", zIndex: 1000 }}>
-                  <Navbar
-                    onToggleProfilBar={toggleProfilBar}
-                    display={displayProfilBar}
-                    inputRef={inputRef}
-                    openFiles={openFiles}
-                    setDisplay={setDisplayProfilBar}
-                    onToggleEmitSound={toggleEmitSound}
-                  />
-                </div>
-                <div style={{ height: "90%" }}>
-                  <Profilbar
-                    displayProfilBar={displayProfilBar}
-                    Logout={Logout}
-                    userProfil={true}
-                    onOpenFilesDialog={openFilesDialog}
-                    inputRef={inputRef}
-                    onFileAdded={onFileAdded}
-                    profil={profil}
-                  />
-                  <CurrentInfoBar currentUser={currentUser} />
-                </div>
-              </div>
             </div>
           </div>
+          <Profilbar
+            displayProfilBar={displayProfilBar}
+            Logout={Logout}
+            userProfil={true}
+            onOpenFilesDialog={openFilesDialog}
+            inputRef={inputRef}
+            onFileAdded={onFileAdded}
+            profil={profil}
+          />
         </div>
       </div>
       <Videocomponent

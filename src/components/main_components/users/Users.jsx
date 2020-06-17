@@ -12,7 +12,7 @@ const Users = ({
   return (
     <div
       className="col-12"
-      style={{ height: "60px", backgroundColor: "whitesmoke" }}
+      style={{ height: "70px", backgroundColor: "whitesmoke" }}
     >
       {users.map((user) => (
         <UserItem
