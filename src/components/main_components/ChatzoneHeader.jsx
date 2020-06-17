@@ -1,6 +1,11 @@
 import React from "react";
 import VideocamOutlinedIcon from "@material-ui/icons/VideocamOutlined";
-const ChatzoneHeader = ({ changeZone, currentUser, onCall }) => {
+const ChatzoneHeader = ({
+  changeZone,
+  currentUser,
+  onCall,
+  onToggleProfilBar,
+}) => {
   let user;
   if (currentUser.length !== 0) {
     if (currentUser[0].emitter && currentUser[0].receiver) {
@@ -81,6 +86,25 @@ const ChatzoneHeader = ({ changeZone, currentUser, onCall }) => {
               >
                 <VideocamOutlinedIcon />
               </button>
+            </li>
+            <li className="nav-item">
+              {" "}
+              <h6 className="nav-link">{sessionStorage.getItem("user")}</h6>
+            </li>
+            &nbsp;
+            <li className="nav-item">
+              <div
+                onClick={onToggleProfilBar}
+                className="toggle-button nav-link"
+              >
+                <i
+                  style={{
+                    color: "gray",
+                    cursor: "pointer",
+                  }}
+                  className="fas fa-ellipsis-v fa-sm fa-fw "
+                ></i>
+              </div>
             </li>
           </ul>
         </div>
