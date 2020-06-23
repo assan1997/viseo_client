@@ -67,11 +67,16 @@ const Contactzone = ({
             </div>
           </div>
         </div>
-        <div className="col-12 w-100">
+        <div
+          className="col-12 finder_zone_result_message"
+          style={{
+            display: `${usersFilter.length !== 0 ? "block" : "none"}`,
+          }}
+        >
           {usersFilter.length === 0 ? (
             ""
           ) : (
-            <p className="row alert alert-info" style={{ borderRadius: "0" }}>
+            <p className="row" style={{}}>
               {contactExist === null
                 ? usersFilter.length === 1
                   ? `${usersFilter.length} utilisateur trouvé`
@@ -88,7 +93,6 @@ const Contactzone = ({
             }`}
           >
             <ContactsIcon style={{ color: "skyblue" }} />
-
             <span style={{ fontSize: "0.8em" }}>Contacts</span>
           </button>
           <button

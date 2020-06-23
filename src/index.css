@@ -1,13 +1,13 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 .App {
@@ -17,7 +17,7 @@ code {
   width: 100%;
   position: relative;
   overflow: hidden;
-  font-family: 'roboto', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans',
+  font-family: "roboto", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans",
     Arial, sans-serif;
 }
 .overlay {
@@ -121,7 +121,7 @@ code {
   box-shadow: 0 15px 20px 0 rgba(0, 0, 0, 0.11),
     0 5px 10px 0 rgba(0, 0, 0, 0.08);
   text-align: center;
-  transition: 'opacity' 0.3s;
+  transition: "opacity" 0.3s;
 }
 .profil_zone_avatar {
   height: 70px;
@@ -213,11 +213,19 @@ code {
   cursor: pointer;
   text-align: justify;
 }
+.finder_zone_result_message {
+  border-radius: 0;
+  height: 5%;
+  background-color: rgb(227, 241, 247);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .contactList {
   overflow: auto;
-  scrollbar-width: 0;
-  height: 70%;
-  position: 'absolute';
+  scrollbar-width: 1px;
+  height: 85%;
+  position: "absolute";
 }
 .contactList button {
   margin-right: 2%;
@@ -267,7 +275,7 @@ code {
   display: inline-block;
   height: 45px;
   width: 45px;
-  background: silver;
+  background: gray;
   border-radius: 100px;
 }
 .chatZoneImg img {
@@ -283,8 +291,8 @@ code {
   outline: none;
 }
 .contact_zone_options {
-  padding-bottom: 10px;
-  text-align: left;
+  height: 5%;
+  background: silver;
 }
 .contact_zone_options .button {
   background: inherit;
@@ -304,8 +312,8 @@ code {
 .contact_zone_options_1::before,
 .contact_zone_options_2::before {
   position: absolute;
-  content: ' ';
-  background: skyblue;
+  content: " ";
+  background: #a0f1c1;
   height: 6px;
   width: 6px;
   margin-left: 25%;
@@ -317,14 +325,14 @@ code {
   outline: none;
 }
 .contact_zone_options .btn {
-  color: '#95939d';
+  color: "#9cfacf";
 }
 
 .chatitem-color-away {
   background: white;
 }
 .chatitem-color-home {
-  background: rgb(183, 225, 241);
+  background: #a0f1c1;
 }
 .chatitem-away {
   float: left;
@@ -386,18 +394,18 @@ code {
 }
 
 .chatitem-home::after {
-  content: ' ';
+  content: " ";
   position: absolute;
   right: -8px;
   top: 0px;
   display: inline-block;
   border-top: 0 solid transparent;
-  border-left: 8px solid rgb(183, 225, 241);
-  border-right: 0 solid rgb(183, 225, 241);
+  border-left: 8px solid #a0f1c1;
+  border-right: 0 solid #a0f1c1;
   border-bottom: 8px solid transparent;
 }
 .chatitem-away::before {
-  content: ' ';
+  content: " ";
   position: absolute;
   left: -8px;
   top: 0px;
@@ -406,6 +414,25 @@ code {
   border-left: 0px solid white;
   border-right: 8px solid white;
   border-bottom: 8px solid transparent;
+}
+.userItem {
+  height: 70px;
+  box-shadow: 0 15px 20px 0 rgba(0, 0, 0, 0.11),
+    0 5px 10px 0 rgba(0, 0, 0, 0.08);
+}
+.useritem-color {
+  background: whitesmoke;
+  border-left: 4px solid #66eece;
+}
+
+.useritem-color-active {
+  background: #080808;
+  border-left: 4px solid #66eece;
+  color: white;
+}
+.useritem-margin {
+  border-radius: 3px;
+  margin-top: 6px;
 }
 .toggle-button {
   padding-top: 7px;

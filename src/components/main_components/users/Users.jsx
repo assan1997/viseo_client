@@ -10,10 +10,7 @@ const Users = ({
   onCurrentUser,
 }) => {
   return (
-    <div
-      className="col-12"
-      style={{ height: "70px", backgroundColor: "whitesmoke" }}
-    >
+    <div className="col-12 userItem">
       {users.map((user) => (
         <UserItem
           key={user._id}

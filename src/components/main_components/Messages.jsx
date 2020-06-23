@@ -9,10 +9,7 @@ const Messages = ({
   onCurrentUser,
 }) => {
   return (
-    <div
-      className="col-12"
-      style={{ height: "70px", backgroundColor: "whitesmoke" }}
-    >
+    <div className="col-12 userItem">
       {messages.length !== 0 &&
         messages.map((message) => (
           <UserItem

@@ -1,7 +1,7 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import Zone from './Zone';
-import SettingsIcon from '@material-ui/icons/Settings';
+import React from "react";
+import { Link } from "react-router-dom";
+import Zone from "./Zone";
+import SettingsIcon from "@material-ui/icons/Settings";
 const Profilbar = ({
   displayProfilBar,
   Logout,
@@ -12,28 +12,27 @@ const Profilbar = ({
 }) => {
   return (
     <div
-      className='col-4 col-md-3'
+      className="col-4 col-md-3"
       style={{
-        right: `${displayProfilBar ? '0' : '-100%'}`,
-        height: '100%',
-        position: 'absolute',
+        right: `${displayProfilBar ? "0" : "-100%"}`,
+        height: "100%",
+        position: "absolute",
         zIndex: 10,
-        display: 'flex',
-        flexDirection: 'column',
-        backgroundColor: 'white',
+        display: "flex",
+        flexDirection: "column",
+        backgroundColor: "white",
       }}
     >
-      <div className='row  h-100'>
+      <div className="row  h-100">
         <Zone
           onOpenFilesDialog={onOpenFilesDialog}
           inputRef={inputRef}
           onFileAdded={onFileAdded}
           profil={profil}
-          size={'50%'}
+          size={"50%"}
         />
-
-        <div className='logout'>
-          <Link to='/sign-in' onClick={Logout} className='link'>
+        <div className="logout">
+          <Link to="/sign-in" onClick={Logout} className="link">
             <h6>Se déconnecter</h6>
           </Link>
         </div>
