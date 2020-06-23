@@ -17,8 +17,9 @@ import Profilbar from './Profilbar';
 import CurrentInfoBar from './CurrentInfoBar';
 import sound from '../../me-too.mp3';
 import callsound from '../../skype-4431.mp3';
+
 const Home = () => {
-  const socket = io(`http://${window.location.hostname}:4000/`, {
+  const socket = io(`http://${window.location.hostname}:4001/`, {
     transports: ['websocket', 'polling'],
   });
 
@@ -62,31 +63,31 @@ const Home = () => {
   const [displayOptions, setDisplayOptions] = useState(false);
   const [updateProfil, setUpdateProfil] = useState();
   const [profil, setProfil] = useState();
-  const [videoTrack, setVideoTrack] = useState();
-  const [videoTrackStream, setVideoTrackStream] = useState();
-  const [videoStreamClone, setVideoStreamClone] = useState(false);
-  const [videoTrackClone, setVideoTrackClone] = useState();
   const [callSession, setCallSession] = useState(false);
   const [notifMessage, setNotifMessage] = useState();
-
+  const [remove, setRemove] = useState(false);
+  const [togVieo, setTogVideo] = useState(false);
   // CE GROUPE D'EFFET PERMET L'INITIALISATION DES DONNEES
   // APPELS A l'API
 
   useEffect(() => {
     axios({
       method: 'get',
-      url: `http://${window.location.hostname}:4000/user/all/`,
+      url: `http://${window.location.hostname}:4001/user/all/`,
     }).then((res) => {
       if (res.data !== null) setUsers(res.data);
     });
   }, []);
 
   useEffect(() => {
+    if (profil === undefined) setProfil(sessionStorage.getItem('profil'));
+  }, [profil]);
+  useEffect(() => {
     let data = {};
     data.user = sessionStorage.getItem('userId');
     axios({
       method: 'post',
-      url: `http://${window.location.hostname}:4000/contact/all/`,
+      url: `http://${window.location.hostname}:4001/contact/all/`,
       data: data,
     }).then((res) => {
       if (res.data !== null) setContactList(res.data.contacts);
@@ -97,7 +98,7 @@ const Home = () => {
     data.user = sessionStorage.getItem('userId');
     axios({
       method: 'post',
-      url: `http://${window.location.hostname}:4000/messages/all`,
+      url: `http://${window.location.hostname}:4001/messages/all`,
       data: data,
     }).then((res) => {
       if (res.data !== null) {
@@ -147,9 +148,8 @@ const Home = () => {
     setTransmission(data);
   });
 
-  socket.on('call- event', function (data) {
+  socket.on('call-event', function (data) {
     setCallEvent(data);
-    alert('fgbgb');
   });
   socket.on('initEnd', function (data) {
     setCallEvent(data);
@@ -165,11 +165,14 @@ const Home = () => {
     }, 2000);
   });
 
+  socket.on('removeVideo', function () {
+    v2Ref.current.classList.toggle('none');
+  });
+
   socket.on('aborted', function () {
     alert('aborted');
     setEnd(true);
   });
-
   socket.on('updateMessages', function (data) {
     setNotifMessage(data);
   });
@@ -194,6 +197,10 @@ const Home = () => {
   }, [initPeer, peerSignal]);
 
   useEffect(() => {
+    setTogVideo(!togVieo);
+    console.log(togVieo);
+  }, [remove]);
+  useEffect(() => {
     if (end) {
       if (receivePeer !== undefined) {
         receivePeer.destroy();
@@ -217,9 +224,9 @@ const Home = () => {
     }
   }, [end, callBoard]);
 
-  useEffect(() => {
+  /*  useEffect(() => {
     mute ? (v2Ref.current.muted = true) : (v2Ref.current.muted = false);
-  }, [mute]);
+  }, [mute]); */
 
   useEffect(() => {
     if (notifMessage !== undefined) {
@@ -245,23 +252,6 @@ const Home = () => {
       setMessages(messagesUpdated);
     }
   }, [notifMessage]);
-  /* 
-  useEffect(() => {
-    if (currentUser.length !== 1) {
-      let user = messages.filter(
-        (u) =>
-          u.emitter === currentUser.emitter._id ||
-          u.receiver === currentUser.receiver._id
-      );
-      setCurrentUser(user);
-    }
-    if (currentUser[0]._id !== undefined) {
-      let user = messages.filter((u) => u._id === currentUser[0]._id);
-      setCurrentUser(user);
-    }
-    if (emitSound) notif.play();
-  }, [messages]);
- */
   useEffect(() => {
     searchInputRef.current.focus();
   });
@@ -289,14 +279,13 @@ const Home = () => {
       initProfil: sessionStorage.getItem('profil'),
     };
     navigator.getUserMedia(
-      { video: true, audio: true },
+      { video: true, audio: false },
       function (stream) {
         setPeer(callData.peer);
         setInit(callData.init);
         setCallBoard(true);
         v1Ref.current.srcObject = stream;
         v1Ref.current.muted = true;
-
         let peer = InitPeer(true, stream);
         peer.on('signal', function (data) {
           callData.signal = data;
@@ -315,10 +304,19 @@ const Home = () => {
     );
   };
   const removeVideoStream = () => {
-    initPeer.removeTrack(videoTrack, videoTrackStream);
+    socket.emit('removeVideo', {
+      peer: initName !== undefined ? init : peer,
+      me: sessionStorage.getItem('userId'),
+      init: initName,
+    });
   };
+
   const addVideoStream = () => {
-    initPeer.addTrack(videoTrackClone, videoTrackStream);
+    socket.emit('addVideo', {
+      peer: initName !== undefined ? init : peer,
+      me: sessionStorage.getItem('userId'),
+      init: initName,
+    });
   };
   /**
    * CETTE FONCTION PERMET DE REPONDRE A UN APPEL
@@ -326,13 +324,12 @@ const Home = () => {
   const AcceptCall = () => {
     audioRef.current.src = '';
     navigator.getUserMedia(
-      { video: true, audio: true },
+      { video: true, audio: false },
       function (stream) {
         setCallControlBoard(false);
         setCallBoard(true);
         v1Ref.current.srcObject = stream;
         v1Ref.current.muted = true;
-
         let peer = InitPeer(false, stream);
         peer.on('signal', function (data) {
           let callData = {
@@ -370,7 +367,7 @@ const Home = () => {
     } else {
       axios({
         method: 'post',
-        url: `http://${window.location.hostname}:4000/user/addNew`,
+        url: `http://${window.location.hostname}:4001/user/addNew`,
         data: data,
       }).then((res) => {
         setContactList(res.data.contacts);
@@ -519,7 +516,7 @@ const Home = () => {
       dialog_id: currentUser.item._id,
     };
     let res = await axios.post(
-      `http://${window.location.hostname}:4000/messages/delete`,
+      `http://${window.location.hostname}:4001/messages/delete`,
       data
     );
     setMessages(res.data);
@@ -549,7 +546,7 @@ const Home = () => {
       };
       axios
         .post(
-          `http://${window.location.hostname}:4000/user/UpdateProfil`,
+          `http://${window.location.hostname}:4001/user/UpdateProfil`,
           formData,
           config
         )
@@ -634,35 +631,6 @@ const Home = () => {
                   </div>
                 </div>
               </div>
-              <div
-                className='d-none d-md-block col-md-4'
-                style={{
-                  height: '100%',
-                }}
-              >
-                <div className='col-12' style={{ height: '10%', zIndex: 1000 }}>
-                  <Navbar
-                    onToggleProfilBar={toggleProfilBar}
-                    display={displayProfilBar}
-                    inputRef={inputRef}
-                    openFiles={openFiles}
-                    setDisplay={setDisplayProfilBar}
-                    onToggleEmitSound={toggleEmitSound}
-                  />
-                </div>
-                <div style={{ height: '90%' }}>
-                  <Profilbar
-                    displayProfilBar={displayProfilBar}
-                    Logout={Logout}
-                    userProfil={true}
-                    onOpenFilesDialog={openFilesDialog}
-                    inputRef={inputRef}
-                    onFileAdded={onFileAdded}
-                    profil={profil}
-                  />
-                  <CurrentInfoBar currentUser={currentUser} />
-                </div>
-              </div>
             </div>
           </div>
           <Profilbar
@@ -691,6 +659,8 @@ const Home = () => {
         onMuteVoice={muteVoice}
         onToggleVideoStream={removeVideoStream}
         onAddVideoStream={addVideoStream}
+        onRemove={remove}
+        onTogVideo={togVieo}
       />
       <div
         className={`offset-md-3 alert ${

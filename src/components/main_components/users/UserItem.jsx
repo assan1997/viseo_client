@@ -70,7 +70,9 @@ const UserItem = ({ user, message, changeZone, onAddContact }) => {
                   className='col-12'
                   style={{ color: 'gray', fontSize: '1.1em' }}
                 >
-                  {lastContent}
+                  {lastContent.length <= 15
+                    ? lastContent
+                    : lastContent.split('').splice(0, 10).join('') + '...'}
                 </div>
               )}
             </div>

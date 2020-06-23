@@ -1,4 +1,8 @@
 import React from 'react';
+import MicIcon from '@material-ui/icons/Mic';
+import MicOffIcon from '@material-ui/icons/MicOff';
+import VideocamIcon from '@material-ui/icons/Videocam';
+import VideocamOffIcon from '@material-ui/icons/VideocamOff';
 const Videocomponent = ({
   callBoard,
   phoneEnd,
@@ -13,6 +17,7 @@ const Videocomponent = ({
   mute,
   onToggleVideoStream,
   onAddVideoStream,
+  onTogVideo,
 }) => {
   return (
     <div
@@ -68,7 +73,7 @@ const Videocomponent = ({
             <div className='ctrboard col-6 col-sm-6 col-md-3 col-lg-2'>
               <div className='ctrboard-speakers'>
                 <div className='icons' onClick={onMuteVoice}>
-                  <i className='fas fa-microphone'></i>
+                  <MicIcon />
                 </div>
                 <div className='icons' onClick={onMuteStreamVoice}>
                   <i className={`fas fa-volume-${mute ? 'up' : 'mute'}`}></i>
@@ -79,15 +84,15 @@ const Videocomponent = ({
               </div>
               <div className='ctrboard-speakers'>
                 <div className='toggle-video' onClick={onToggleVideoStream}>
-                  <i className='fas fa-video'></i>
+                  <VideocamIcon />
                 </div>
+
                 <div className='toggle-video' onClick={onAddVideoStream}>
-                  <i className='fas fa-video-slash'></i>
+                  <VideocamOffIcon />
                 </div>
-                <div className='d-md-block d-none'>
-                  <div onClick={onResize} className='toggle-video'>
-                    <i className='fas fa-compress'></i>
-                  </div>
+
+                <div className='toggle-video' onClick={onAddVideoStream}>
+                  <VideocamOffIcon />
                 </div>
               </div>
             </div>

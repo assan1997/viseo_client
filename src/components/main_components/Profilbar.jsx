@@ -1,6 +1,7 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import Profil from "./Profil";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import Zone from './Zone';
+import SettingsIcon from '@material-ui/icons/Settings';
 const Profilbar = ({
   displayProfilBar,
   Logout,
@@ -11,50 +12,29 @@ const Profilbar = ({
 }) => {
   return (
     <div
-      className="col-3"
+      className='col-4 col-md-3'
       style={{
-        right: `${displayProfilBar ? "0" : "-100%"}`,
-        height: "100%",
-        position: "absolute",
-        background: "red",
+        right: `${displayProfilBar ? '0' : '-100%'}`,
+        height: '100%',
+        position: 'absolute',
         zIndex: 10,
-        display: "flex",
-        flexDirection: "column",
+        display: 'flex',
+        flexDirection: 'column',
+        backgroundColor: 'white',
       }}
     >
-      <div className="row">
-        <Profil
+      <div className='row  h-100'>
+        <Zone
           onOpenFilesDialog={onOpenFilesDialog}
           inputRef={inputRef}
           onFileAdded={onFileAdded}
           profil={profil}
+          size={'50%'}
         />
-        <div
-          style={{
-            height: "10%",
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          {sessionStorage.getItem("user") !== undefined ? (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <h4>{sessionStorage.getItem("user")}</h4>
-            </div>
-          ) : (
-            ""
-          )}
-        </div>
-        <div className="settings"></div>
-        <div className="logout">
-          <Link to="/sign-in" onClick={Logout} className="link">
-            Se déconnecter
+
+        <div className='logout'>
+          <Link to='/sign-in' onClick={Logout} className='link'>
+            <h6>Se déconnecter</h6>
           </Link>
         </div>
       </div>

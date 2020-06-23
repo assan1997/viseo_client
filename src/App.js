@@ -5,7 +5,6 @@ import SignUp from './components/access_components/SignUp';
 import Navbar from './components/partials_components/Navbar';
 import Home from './components/main_components/Home';
 import UserContext from './UserContext';
-import './App.css';
 const App = () => {
   const context = useContext(UserContext);
   const [, setUserData] = useState();
@@ -18,7 +17,7 @@ const App = () => {
       <div className='App col-12'>
         <Switch>
           <Route exact path='/' render={() => <SignIn />}></Route>
-          )}
+
           {sessionStorage.getItem('user') &&
             sessionStorage.getItem('user') !== 'null' && (
               <Route exact path='/' render={() => <Home />}></Route>
