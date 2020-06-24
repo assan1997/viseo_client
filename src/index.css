@@ -292,7 +292,9 @@ code {
 }
 .contact_zone_options {
   height: 5%;
-  background: silver;
+  background: whitesmoke;
+  display: flex;
+  align-items: center;
 }
 .contact_zone_options .button {
   background: inherit;
@@ -415,6 +417,40 @@ code {
   border-right: 8px solid white;
   border-bottom: 8px solid transparent;
 }
+
+.currentUserOverlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: #66eece;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.title-logo::after {
+  height: 10px;
+  width: 10px;
+  position: absolute;
+  background-color: yellow;
+  content: "";
+  border-radius: 100px;
+}
+.welcome-profil {
+  height: 150px;
+  width: 150px;
+  background-color: whitesmoke;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .userItem {
   height: 70px;
   box-shadow: 0 15px 20px 0 rgba(0, 0, 0, 0.11),
@@ -424,7 +460,6 @@ code {
   background: whitesmoke;
   border-left: 4px solid #66eece;
 }
-
 .useritem-color-active {
   background: #080808;
   border-left: 4px solid #66eece;

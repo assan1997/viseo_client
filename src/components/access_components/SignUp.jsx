@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import FormChecker from './small/FormChecker';
-import SignUpButton from './small/SignUpButton';
+import React, { useState } from "react";
+import axios from "axios";
+import FormChecker from "./small/FormChecker";
+import SignUpButton from "./small/SignUpButton";
 const SignUp = () => {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [checkPassword, setCheckPassword] = useState(false);
   const [allFieldsOk, setAllFieldsOk] = useState(false);
   const [accountSatus, setAccountStatus] = useState({});
@@ -40,13 +40,13 @@ const SignUp = () => {
     data.login = username;
     data.email = email;
     data.password = password;
-    setUsername('');
-    setEmail('');
-    setPassword('');
-    setConfirmPassword('');
+    setUsername("");
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
     axios({
-      method: 'post',
-      url: 'http://localhost:4000/user/create',
+      method: "post",
+      url: "https://fluter-socket-django.herokuapp.com/user/create/",
       data: data,
     }).then((res) => {
       console.log(res);
@@ -54,65 +54,65 @@ const SignUp = () => {
     });
   };
   return (
-    <div className='container'>
+    <div className="container">
       <form
         onSubmit={onSubmit}
-        className='text-center sign col-12 col-md-5'
+        className="text-center sign col-12 col-md-5"
         style={formStyle}
       >
         <div style={divStyle}>
-          <legend style={{ textAlign: 'justify' }}> viseo</legend>
-          <div className='row'>
+          <legend style={{ textAlign: "justify" }}> viseo</legend>
+          <div className="row">
             {accountSatus.err || accountSatus.success ? (
-              <div className='form-group col-12'>
+              <div className="form-group col-12">
                 {accountSatus.err !== undefined ? (
-                  <div className='alert alert-danger'>{accountSatus.err}</div>
+                  <div className="alert alert-danger">{accountSatus.err}</div>
                 ) : (
-                  <div className='alert alert-success'>
+                  <div className="alert alert-success">
                     {accountSatus.success}
                   </div>
                 )}
               </div>
             ) : (
-              ''
+              ""
             )}
-            <div className='form-group col-md-6'>
+            <div className="form-group col-md-6">
               <input
-                type='text'
+                type="text"
                 value={username}
                 onChange={changeUsername}
                 onKeyUp={verifyAllFields}
-                placeholder='Username'
+                placeholder="Username"
                 style={inputStyle}
               />
             </div>
-            <div className='form-group col-md-6'>
+            <div className="form-group col-md-6">
               <input
-                type='email'
+                type="email"
                 value={email}
                 onChange={changeEmail}
                 onKeyUp={verifyAllFields}
-                placeholder='Email'
+                placeholder="Email"
                 style={inputStyle}
               />
             </div>
-            <div className='form-group col-md-6'>
+            <div className="form-group col-md-6">
               <input
-                type='password'
+                type="password"
                 value={password}
                 onChange={changePassword}
                 onKeyUp={verifyInput}
-                placeholder='Password'
+                placeholder="Password"
                 style={inputStyle}
               />
             </div>
-            <div className='form-group col-md-6'>
+            <div className="form-group col-md-6">
               <input
-                type='password'
+                type="password"
                 value={confirmPassword}
                 onChange={changeConfPassword}
                 onKeyUp={verifyInput}
-                placeholder='Confirm your password'
+                placeholder="Confirm your password"
                 style={inputStyle}
               />
             </div>
@@ -131,21 +131,21 @@ const SignUp = () => {
   );
 };
 const inputStyle = {
-  width: '100%',
-  outline: 'none',
-  border: 'none',
-  borderBottom: '0.2px solid silver',
-  lineHeight: '3em',
+  width: "100%",
+  outline: "none",
+  border: "none",
+  borderBottom: "0.2px solid silver",
+  lineHeight: "3em",
 };
 const formStyle = {
-  height: '400px',
-  margin: '0 auto',
-  marginTop: '10%',
+  height: "400px",
+  margin: "0 auto",
+  marginTop: "10%",
 };
 const divStyle = {
-  height: '100%',
-  borderRadius: '5px',
-  width: '100%',
-  paddingTop: '10px',
+  height: "100%",
+  borderRadius: "5px",
+  width: "100%",
+  paddingTop: "10px",
 };
 export default SignUp;

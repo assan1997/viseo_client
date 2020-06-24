@@ -79,7 +79,6 @@ const UserItem = ({ user, message, changeZone, onAddContact }) => {
               )}
             </div>
           </div>
-
           {message && (
             <div
               className="col-3"

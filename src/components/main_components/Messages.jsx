@@ -3,7 +3,7 @@ import UserItem from "./users/UserItem";
 const Messages = ({
   messages,
   add,
-  onAddContact,
+  onAddContact, 
   onCall,
   changeZone,
   onCurrentUser,

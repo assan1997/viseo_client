@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import io from "socket.io-client";
 import Peer from "simple-peer";
 import axios from "axios";
@@ -17,12 +18,9 @@ import Profilbar from "./Profilbar";
 //import CurrentInfoBar from "./CurrentInfoBar";
 import sound from "../../me-too.mp3";
 import callsound from "../../skype-4431.mp3";
-
+import PersonOutlineIcon from "@material-ui/icons/PersonOutline";
 const Home = () => {
-  const socket = io(`http://${window.location.hostname}:4001/`, {
-    transports: ["websocket", "polling"],
-  });
-
+  const socket = io(`https://fluter-socket-django.herokuapp.com/`);
   let v1Ref = useRef(null);
   let v2Ref = useRef(null);
   let scrollRef = useRef(null);
@@ -48,6 +46,7 @@ const Home = () => {
   const [callBoard, setCallBoard] = useState(false);
   const [callControlBoard, setCallControlBoard] = useState(false);
   const [callEvent, setCallEvent] = useState(null);
+  const [callType, setCallType] = useState();
   const [resize, setResize] = useState(false);
   const [mute, setMute] = useState(false);
   const [contactExist, setContactExist] = useState(null);
@@ -67,13 +66,14 @@ const Home = () => {
   const [notifMessage, setNotifMessage] = useState();
   const [remove, setRemove] = useState(false);
   const [togVieo, setTogVideo] = useState(false);
+
   // CE GROUPE D'EFFET PERMET L'INITIALISATION DES DONNEES
   // APPELS A l'API
 
   useEffect(() => {
     axios({
       method: "get",
-      url: `http://${window.location.hostname}:4001/user/all/`,
+      url: `https://fluter-socket-django.herokuapp.com/user/all/`,
     }).then((res) => {
       if (res.data !== null) setUsers(res.data);
     });
@@ -87,7 +87,7 @@ const Home = () => {
     data.user = sessionStorage.getItem("userId");
     axios({
       method: "post",
-      url: `http://${window.location.hostname}:4001/contact/all/`,
+      url: `https://fluter-socket-django.herokuapp.com/contact/all/`,
       data: data,
     }).then((res) => {
       if (res.data !== null) setContactList(res.data.contacts);
@@ -98,7 +98,7 @@ const Home = () => {
     data.user = sessionStorage.getItem("userId");
     axios({
       method: "post",
-      url: `http://${window.location.hostname}:4001/messages/all`,
+      url: `https://fluter-socket-django.herokuapp.com/messages/all`,
       data: data,
     }).then((res) => {
       if (res.data !== null) {
@@ -141,9 +141,9 @@ const Home = () => {
       setInitProfil(data.initProfil);
       setInitName(data.user);
       setInitSignal(data.signal);
+      setCallType(data.callType);
     }
   });
-
   socket.on("AcceptCall", (data) => {
     setTransmission(data);
   });
@@ -232,6 +232,7 @@ const Home = () => {
   useEffect(() => {
     console.log(messages);
     if (notifMessage !== undefined) {
+      console.log(notifMessage);
       if (messages.length !== 0) {
         let chat = messages.find(
           (m) =>
@@ -283,10 +284,12 @@ const Home = () => {
    * @param {CE PARAMETRE REPRESENTE L'ELEMENT SUR LEQUEL ON CLIQUE (BOUTTON D'APPEL))} e
    */
   const call = (e) => {
+    console.log(e.currentTarget.id);
     let callData = {
       peer: e.currentTarget.id,
       init: sessionStorage.getItem("userId"),
       initProfil: sessionStorage.getItem("profil"),
+      callType: "video-call",
     };
     navigator.getUserMedia(
       { video: true, audio: false },
@@ -296,6 +299,8 @@ const Home = () => {
         setCallBoard(true);
         v1Ref.current.srcObject = stream;
         v1Ref.current.muted = true;
+
+        console.log(stream);
         let peer = InitPeer(true, stream);
         peer.on("signal", function (data) {
           callData.signal = data;
@@ -313,6 +318,39 @@ const Home = () => {
       }
     );
   };
+
+  const SharingScreen = async (e) => {
+    let callData = {
+      peer: e.currentTarget.id,
+      init: sessionStorage.getItem("userId"),
+      initProfil: sessionStorage.getItem("profil"),
+      callType: "sharing-screen",
+    };
+    let captureStream = await navigator.mediaDevices.getDisplayMedia({
+      video: {
+        cursor: "always",
+      },
+      audio: false,
+    });
+    console.log(captureStream);
+    setPeer(callData.peer);
+    setInit(callData.init);
+    setCallBoard(true);
+    v1Ref.current.srcObject = captureStream;
+    v1Ref.current.muted = true;
+    let peer = InitPeer(true, captureStream);
+    peer.on("signal", function (data) {
+      callData.signal = data;
+      if (!callSession) {
+        socket.emit("sharing-screen", { ...callData, signalType: "call" });
+        setCallSession(true);
+      } else {
+        socket.emit("call", { ...callData, signalType: "nocall" });
+      }
+    });
+    setInitPeer(peer);
+  };
+
   const removeVideoStream = () => {
     socket.emit("removeVideo", {
       peer: initName !== undefined ? init : peer,
@@ -377,7 +415,7 @@ const Home = () => {
     } else {
       axios({
         method: "post",
-        url: `http://${window.location.hostname}:4001/user/addNew`,
+        url: `https://fluter-socket-django.herokuapp.com/user/addNew`,
         data: data,
       }).then((res) => {
         setContactList(res.data.contacts);
@@ -449,7 +487,7 @@ const Home = () => {
         u.emitter._id === e.currentTarget.id ||
         u.receiver._id === e.currentTarget.id
     );
-    if (userOnmessages.length === 0) {
+    if (userOnmessages === undefined) {
       let userOnContacts = contactList.find(
         (u) => u._id === e.currentTarget.id
       );
@@ -527,7 +565,7 @@ const Home = () => {
       dialog_id: currentUser.item._id,
     };
     let res = await axios.post(
-      `http://${window.location.hostname}:4001/messages/delete`,
+      `https://fluter-socket-django.herokuapp.com/messages/delete`,
       data
     );
     setMessages(res.data);
@@ -557,7 +595,7 @@ const Home = () => {
       };
       axios
         .post(
-          `http://${window.location.hostname}:4001/user/UpdateProfil`,
+          `https://fluter-socket-django.herokuapp.com/user/UpdateProfil`,
           formData,
           config
         )
@@ -600,23 +638,59 @@ const Home = () => {
             <div className="row h-100">
               <div className="col-12 ">
                 <div className="row h-100">
+                  {currentUser.length === 0 && (
+                    <div className="currentUserOverlay">
+                      <h1 className="title-logo">Viseo Chanel</h1>
+                      {profil !== "undefined" && (
+                        <div
+                          className="welcome-profil"
+                          style={{
+                            backgroundImage: `${
+                              profil !== undefined
+                                ? `url(http://localhost:4001/ressources/${profil})`
+                                : ""
+                            }`,
+                          }}
+                        ></div>
+                      )}
+                      {profil === "undefined" && (
+                        <div className="welcome-profil">
+                          <PersonOutlineIcon size="large" />
+                        </div>
+                      )}
+                      <h4>Bienvenue , {sessionStorage.getItem("user")}</h4>
+                      <div>
+                        <Link
+                          to="/sign-in"
+                          onClick={Logout}
+                          className="nav-link"
+                        >
+                          <h6>Se déconnecter</h6>
+                        </Link>
+                      </div>
+                      <h6>v1.0.0</h6>
+                    </div>
+                  )}
                   <div className="col-12" style={{ height: "10%" }}>
                     <ChatzoneHeader
                       changeZone={exitChatZone}
                       currentUser={currentUser}
                       onCall={call}
                       onToggleProfilBar={toggleProfilBar}
+                      onSharingScreen={SharingScreen}
                     />
                   </div>
                   <div
                     id="ContainerElementID"
-                    ref={scrollRef}
                     className="col-12"
                     style={{
                       height: "80%",
-                      overflow: "scroll",
+                      overflow: `${
+                        currentUser.length !== 0 ? "scroll" : "none"
+                      }`,
                       paddingTop: "7%",
                       background: "#ECE5DD",
+                      position: "relative",
                     }}
                   >
                     <Chatzonebody
@@ -700,6 +774,7 @@ const Home = () => {
         phoneEnd={phoneEnd}
         updateTime={updateTime}
         onDenied={Denied}
+        callType={callType}
       />
     </div>
   );
