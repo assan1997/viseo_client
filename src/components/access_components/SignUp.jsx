@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 import FormChecker from "./small/FormChecker";
 import SignUpButton from "./small/SignUpButton";
+import Env from "../../configContext";
 const SignUp = () => {
+  const EnvContext = useContext(Env);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -46,7 +48,7 @@ const SignUp = () => {
     setConfirmPassword("");
     axios({
       method: "post",
-      url: "https://fluter-socket-django.herokuapp.com/user/create/",
+      url: `${EnvContext.local}/user/create/`,
       data: data,
     }).then((res) => {
       console.log(res);

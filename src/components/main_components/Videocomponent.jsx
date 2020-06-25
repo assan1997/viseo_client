@@ -3,6 +3,7 @@ import MicIcon from "@material-ui/icons/Mic";
 import MicOffIcon from "@material-ui/icons/MicOff";
 import VideocamIcon from "@material-ui/icons/Videocam";
 import VideocamOffIcon from "@material-ui/icons/VideocamOff";
+import ScreenShareIcon from "@material-ui/icons/ScreenShare";
 const Videocomponent = ({
   callBoard,
   phoneEnd,
@@ -18,6 +19,7 @@ const Videocomponent = ({
   onToggleVideoStream,
   onAddVideoStream,
   onTogVideo,
+  onSharingScreen,
 }) => {
   return (
     <div
@@ -85,6 +87,9 @@ const Videocomponent = ({
               <div className="ctrboard-speakers">
                 <div className="toggle-video" onClick={onToggleVideoStream}>
                   <VideocamIcon />
+                </div>
+                <div className="toggle-video" onClick={onSharingScreen}>
+                  <ScreenShareIcon />
                 </div>
               </div>
             </div>

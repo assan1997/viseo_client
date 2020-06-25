@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import io from "socket.io-client";
 import Peer from "simple-peer";
@@ -19,8 +19,10 @@ import Profilbar from "./Profilbar";
 import sound from "../../me-too.mp3";
 import callsound from "../../skype-4431.mp3";
 import PersonOutlineIcon from "@material-ui/icons/PersonOutline";
+import Env from "../../configContext";
 const Home = () => {
-  const socket = io(`https://fluter-socket-django.herokuapp.com/`);
+  const EnvContext = useContext(Env);
+  const socket = io(`${EnvContext.local}`);
   let v1Ref = useRef(null);
   let v2Ref = useRef(null);
   let scrollRef = useRef(null);
@@ -66,14 +68,14 @@ const Home = () => {
   const [notifMessage, setNotifMessage] = useState();
   const [remove, setRemove] = useState(false);
   const [togVieo, setTogVideo] = useState(false);
-
+  const [videoStream, setVideoStream] = useState();
   // CE GROUPE D'EFFET PERMET L'INITIALISATION DES DONNEES
   // APPELS A l'API
 
   useEffect(() => {
     axios({
       method: "get",
-      url: `https://fluter-socket-django.herokuapp.com/user/all/`,
+      url: `${EnvContext.local}/user/all/`,
     }).then((res) => {
       if (res.data !== null) setUsers(res.data);
     });
@@ -87,7 +89,7 @@ const Home = () => {
     data.user = sessionStorage.getItem("userId");
     axios({
       method: "post",
-      url: `https://fluter-socket-django.herokuapp.com/contact/all/`,
+      url: `${EnvContext.local}/contact/all/`,
       data: data,
     }).then((res) => {
       if (res.data !== null) setContactList(res.data.contacts);
@@ -98,7 +100,7 @@ const Home = () => {
     data.user = sessionStorage.getItem("userId");
     axios({
       method: "post",
-      url: `https://fluter-socket-django.herokuapp.com/messages/all`,
+      url: `${EnvContext.local}/messages/all`,
       data: data,
     }).then((res) => {
       if (res.data !== null) {
@@ -271,11 +273,10 @@ const Home = () => {
    * @param {} type  ce parametre permet de mettre le parametre iniator a (true ou false)
    * @param {} stream  ce parametre transmet le stream de l'utilisateur dans simple-peer
    */
-  function InitPeer(type, stream) {
+  function InitPeer(type) {
     let peer = new Peer({
       initiator: type,
       trickle: false,
-      stream: stream,
     });
     return peer;
   }
@@ -299,9 +300,10 @@ const Home = () => {
         setCallBoard(true);
         v1Ref.current.srcObject = stream;
         v1Ref.current.muted = true;
-
         console.log(stream);
-        let peer = InitPeer(true, stream);
+        let peer = InitPeer(true);
+        setVideoStream(stream);
+        peer.addStream(stream);
         peer.on("signal", function (data) {
           callData.signal = data;
           if (!callSession) {
@@ -332,23 +334,28 @@ const Home = () => {
       },
       audio: false,
     });
-    console.log(captureStream);
-    setPeer(callData.peer);
-    setInit(callData.init);
-    setCallBoard(true);
-    v1Ref.current.srcObject = captureStream;
-    v1Ref.current.muted = true;
-    let peer = InitPeer(true, captureStream);
-    peer.on("signal", function (data) {
-      callData.signal = data;
-      if (!callSession) {
-        socket.emit("sharing-screen", { ...callData, signalType: "call" });
-        setCallSession(true);
-      } else {
-        socket.emit("call", { ...callData, signalType: "nocall" });
-      }
-    });
-    setInitPeer(peer);
+    if (peer !== undefined && videoStream !== undefined) {
+      //console.log("peer", peer);
+      initPeer.removeStream(videoStream);
+      initPeer.addStream(captureStream);
+    }
+    // console.log(captureStream);
+    // setPeer(callData.peer);
+    // setInit(callData.init);
+    // setCallBoard(true);
+    // v1Ref.current.srcObject = captureStream;
+    // v1Ref.current.muted = true;
+    // let peer = InitPeer(true, captureStream);
+    // peer.on("signal", function (data) {
+    //   callData.signal = data;
+    //   if (!callSession) {
+    //     socket.emit("sharing-screen", { ...callData, signalType: "call" });
+    //     setCallSession(true);
+    //   } else {
+    //     socket.emit("call", { ...callData, signalType: "nocall" });
+    //   }
+    // });
+    //setInitPeer(peer);
   };
 
   const removeVideoStream = () => {
@@ -378,7 +385,8 @@ const Home = () => {
         setCallBoard(true);
         v1Ref.current.srcObject = stream;
         v1Ref.current.muted = true;
-        let peer = InitPeer(false, stream);
+        let peer = InitPeer(false);
+        peer.addStream(stream);
         peer.on("signal", function (data) {
           let callData = {
             signal: data,
@@ -415,7 +423,7 @@ const Home = () => {
     } else {
       axios({
         method: "post",
-        url: `https://fluter-socket-django.herokuapp.com/user/addNew`,
+        url: `${EnvContext.local}/user/addNew`,
         data: data,
       }).then((res) => {
         setContactList(res.data.contacts);
@@ -564,10 +572,7 @@ const Home = () => {
       msg: e.currentTarget.id,
       dialog_id: currentUser.item._id,
     };
-    let res = await axios.post(
-      `https://fluter-socket-django.herokuapp.com/messages/delete`,
-      data
-    );
+    let res = await axios.post(`${EnvContext.local}/messages/delete`, data);
     setMessages(res.data);
   };
   const onFileAdded = (event) => {
@@ -594,11 +599,7 @@ const Home = () => {
         headers: { "content-type": "multipart/form-data" },
       };
       axios
-        .post(
-          `https://fluter-socket-django.herokuapp.com/user/UpdateProfil`,
-          formData,
-          config
-        )
+        .post(`${EnvContext.local}/user/UpdateProfil`, formData, config)
         .then((res) => {
           setProfil(res.data.profil);
         });
@@ -647,7 +648,7 @@ const Home = () => {
                           style={{
                             backgroundImage: `${
                               profil !== undefined
-                                ? `url(http://localhost:4001/ressources/${profil})`
+                                ? `${EnvContext.local}/ressources/${profil})`
                                 : ""
                             }`,
                           }}
@@ -746,6 +747,7 @@ const Home = () => {
         onAddVideoStream={addVideoStream}
         onRemove={remove}
         onTogVideo={togVieo}
+        onSharingScreen={SharingScreen}
       />
       <div
         className={`offset-md-3 alert ${
