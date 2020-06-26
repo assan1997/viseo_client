@@ -35,7 +35,7 @@ const SignIn = () => {
     setLoader(true);
     axios({
       method: "post",
-      url: `${EnvContext.local}/user/connect`,
+      url: `${EnvContext.online}/user/connect`,
       data: data,
     }).then((res) => {
       if (res.data.err !== undefined) {
@@ -80,7 +80,7 @@ const SignIn = () => {
       >
         <div style={fieldsetStyle}>
           <legend style={{ textAlign: "justify", color: "Black" }}>
-            viseo
+            <h4 className="title-logo"> Viseo chanel </h4>
           </legend>
           <div className="form-group">
             <input
@@ -133,6 +133,7 @@ const formStyle = {
   height: "400px",
   margin: "0 auto",
   marginTop: "10%",
+  borderRadius: "5px",
 };
 const inputStyle = {
   width: "100%",

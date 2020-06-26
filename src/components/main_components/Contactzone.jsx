@@ -24,7 +24,7 @@ const Contactzone = ({
 }) => {
   return (
     <div
-      className={`contactZone col-xs-12 col-md-5 col-xl-2 ${
+      className={`contactZone col-xs-12 col-md-4 col-xl-2 ${
         toggleZone ? "d-none" : ""
       } d-md-block`}
     >

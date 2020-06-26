@@ -104,31 +104,6 @@ const ChatzoneHeader = ({
                 </Tooltip>
               </button>
             </li>
-            <li className="nav-item d-none d-md-block">
-              <button
-                style={{
-                  background: "transparent",
-                  borderRadius: 0,
-                  border: "none",
-                  outline: "none",
-                }}
-                className="nav-link"
-                id={`${
-                  currentUser.length !== 0
-                    ? currentUser[0].emitter !== undefined
-                      ? user.emitter !== null
-                        ? user.emitter._id
-                        : user.receiver._id
-                      : currentUser[0]._id
-                    : ""
-                }`}
-                onClick={onSharingScreen}
-              >
-                <Tooltip title="Partage d'ecran">
-                  <ScreenShareIcon aria-label="partage d'ecran" />
-                </Tooltip>
-              </button>
-            </li>
             <li className="nav-item">
               {" "}
               <h6 className="nav-link">{sessionStorage.getItem("user")}</h6>

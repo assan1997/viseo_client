@@ -20,9 +20,10 @@ import sound from "../../me-too.mp3";
 import callsound from "../../skype-4431.mp3";
 import PersonOutlineIcon from "@material-ui/icons/PersonOutline";
 import Env from "../../configContext";
+const emeoji = require("emojis-list");
 const Home = () => {
   const EnvContext = useContext(Env);
-  const socket = io(`${EnvContext.local}`);
+  const socket = io(`${EnvContext.online}`);
   let v1Ref = useRef(null);
   let v2Ref = useRef(null);
   let scrollRef = useRef(null);
@@ -66,16 +67,20 @@ const Home = () => {
   const [profil, setProfil] = useState();
   const [callSession, setCallSession] = useState(false);
   const [notifMessage, setNotifMessage] = useState();
-  const [remove, setRemove] = useState(false);
   const [togVieo, setTogVideo] = useState(false);
+  const [videoTrack, setVideoTrack] = useState();
+  const [audioTrack, setAudioTrack] = useState();
   const [videoStream, setVideoStream] = useState();
+  const [screenTrack, setScreenTrack] = useState();
+  const [captureStream, setCaptureStream] = useState();
+  const [exitSharingScreen, setExitSharingScreen] = useState(false);
   // CE GROUPE D'EFFET PERMET L'INITIALISATION DES DONNEES
   // APPELS A l'API
 
   useEffect(() => {
     axios({
       method: "get",
-      url: `${EnvContext.local}/user/all/`,
+      url: `${EnvContext.online}/user/all/`,
     }).then((res) => {
       if (res.data !== null) setUsers(res.data);
     });
@@ -89,7 +94,7 @@ const Home = () => {
     data.user = sessionStorage.getItem("userId");
     axios({
       method: "post",
-      url: `${EnvContext.local}/contact/all/`,
+      url: `${EnvContext.online}/contact/all/`,
       data: data,
     }).then((res) => {
       if (res.data !== null) setContactList(res.data.contacts);
@@ -100,7 +105,7 @@ const Home = () => {
     data.user = sessionStorage.getItem("userId");
     axios({
       method: "post",
-      url: `${EnvContext.local}/messages/all`,
+      url: `${EnvContext.online}/messages/all`,
       data: data,
     }).then((res) => {
       if (res.data !== null) {
@@ -198,11 +203,6 @@ const Home = () => {
       });
     }
   }, [initPeer, peerSignal]);
-
-  useEffect(() => {
-    setTogVideo(!togVieo);
-    console.log(togVieo);
-  }, [remove]);
   useEffect(() => {
     if (end) {
       if (receivePeer !== undefined) {
@@ -267,6 +267,9 @@ const Home = () => {
 
   useEffect(() => {
     searchInputRef.current.focus();
+    console.log(typeof emeoji);
+    console.log(emeoji.length);
+    console.log(emeoji.splice(0, 10));
   });
   /**
    *CETTE FONCTION PERMET D'INITIALISER SIMPLE-PEER
@@ -293,17 +296,21 @@ const Home = () => {
       callType: "video-call",
     };
     navigator.getUserMedia(
-      { video: true, audio: false },
+      { video: true, audio: true },
       function (stream) {
+        console.log(stream.getTracks()[0]);
         setPeer(callData.peer);
         setInit(callData.init);
         setCallBoard(true);
         v1Ref.current.srcObject = stream;
         v1Ref.current.muted = true;
-        console.log(stream);
+        console.log(stream.getTracks()[1]);
         let peer = InitPeer(true);
         setVideoStream(stream);
-        peer.addStream(stream);
+        setAudioTrack(stream.getTracks()[0]);
+        setVideoTrack(stream.getTracks()[1]);
+        peer.addTrack(stream.getTracks()[0], stream);
+        peer.addTrack(stream.getTracks()[1], stream);
         peer.on("signal", function (data) {
           callData.signal = data;
           if (!callSession) {
@@ -319,59 +326,6 @@ const Home = () => {
         console.log(e);
       }
     );
-  };
-
-  const SharingScreen = async (e) => {
-    let callData = {
-      peer: e.currentTarget.id,
-      init: sessionStorage.getItem("userId"),
-      initProfil: sessionStorage.getItem("profil"),
-      callType: "sharing-screen",
-    };
-    let captureStream = await navigator.mediaDevices.getDisplayMedia({
-      video: {
-        cursor: "always",
-      },
-      audio: false,
-    });
-    if (peer !== undefined && videoStream !== undefined) {
-      //console.log("peer", peer);
-      initPeer.removeStream(videoStream);
-      initPeer.addStream(captureStream);
-    }
-    // console.log(captureStream);
-    // setPeer(callData.peer);
-    // setInit(callData.init);
-    // setCallBoard(true);
-    // v1Ref.current.srcObject = captureStream;
-    // v1Ref.current.muted = true;
-    // let peer = InitPeer(true, captureStream);
-    // peer.on("signal", function (data) {
-    //   callData.signal = data;
-    //   if (!callSession) {
-    //     socket.emit("sharing-screen", { ...callData, signalType: "call" });
-    //     setCallSession(true);
-    //   } else {
-    //     socket.emit("call", { ...callData, signalType: "nocall" });
-    //   }
-    // });
-    //setInitPeer(peer);
-  };
-
-  const removeVideoStream = () => {
-    socket.emit("removeVideo", {
-      peer: initName !== undefined ? init : peer,
-      me: sessionStorage.getItem("userId"),
-      init: initName,
-    });
-  };
-
-  const addVideoStream = () => {
-    socket.emit("addVideo", {
-      peer: initName !== undefined ? init : peer,
-      me: sessionStorage.getItem("userId"),
-      init: initName,
-    });
   };
   /**
    * CETTE FONCTION PERMET DE REPONDRE A UN APPEL
@@ -407,6 +361,51 @@ const Home = () => {
     );
   };
   /**
+   * CETTE FONCTION PERMET DE PASSER EN PARTAGE D'ECRAN
+   */
+  const SharingScreen = async () => {
+    let captureStream = await navigator.mediaDevices.getDisplayMedia({
+      video: {
+        cursor: "always",
+      },
+      audio: false,
+    });
+
+    setScreenTrack(captureStream.getTracks()[0]);
+    setCaptureStream(captureStream);
+    //initPeer.addTrack(captureStream.getTracks()[0], captureStream);
+    initPeer.replaceTrack(
+      videoTrack,
+      captureStream.getTracks()[0],
+      videoStream
+    );
+    setExitSharingScreen(!exitSharingScreen);
+  };
+
+  const onExitSharingScreen = () => {
+    //navigator.getUserMedia();
+    //console.log(screenTrack);
+    setExitSharingScreen(!exitSharingScreen);
+    initPeer.replaceTrack(videoTrack, videoTrack, videoStream);
+  };
+
+  const removeVideoStream = () => {
+    setTogVideo(!togVieo);
+    socket.emit("removeVideo", {
+      peer: initName !== undefined ? init : peer,
+      me: sessionStorage.getItem("userId"),
+      init: initName,
+    });
+  };
+
+  const addVideoStream = () => {
+    socket.emit("addVideo", {
+      peer: initName !== undefined ? init : peer,
+      me: sessionStorage.getItem("userId"),
+      init: initName,
+    });
+  };
+  /**
    * CETTE FONCTION PERMET D'AJOUTER UN NOUVEAU CONTACT
    * @param {} event bouton pour ajouter un utilisateur
    */
@@ -423,7 +422,7 @@ const Home = () => {
     } else {
       axios({
         method: "post",
-        url: `${EnvContext.local}/user/addNew`,
+        url: `${EnvContext.online}/user/addNew`,
         data: data,
       }).then((res) => {
         setContactList(res.data.contacts);
@@ -468,7 +467,7 @@ const Home = () => {
     initPeer.removeTrack(initStream.getAudioTracks()[0], initStream);
   };
   const updateTime = () => {
-    console.log(v2Ref.current.currentTime);
+    // console.log(v2Ref.current.currentTime);
   };
   /**
    * Cette fonction permet de rechercher les utilisateurs
@@ -519,7 +518,6 @@ const Home = () => {
   const onDisplayContact = () => {
     setDisplayMessage(false);
   };
-
   const onManageMessageInput = (e) => {
     setMessageContent(e.target.value);
     setInputFocus(false);
@@ -542,7 +540,6 @@ const Home = () => {
     socket.emit("sendMessage", message);
     setMessageContent("");
   };
-
   useEffect(() => {
     scrollToBottom();
   });
@@ -572,7 +569,7 @@ const Home = () => {
       msg: e.currentTarget.id,
       dialog_id: currentUser.item._id,
     };
-    let res = await axios.post(`${EnvContext.local}/messages/delete`, data);
+    let res = await axios.post(`${EnvContext.online}/messages/delete`, data);
     setMessages(res.data);
   };
   const onFileAdded = (event) => {
@@ -599,7 +596,7 @@ const Home = () => {
         headers: { "content-type": "multipart/form-data" },
       };
       axios
-        .post(`${EnvContext.local}/user/UpdateProfil`, formData, config)
+        .post(`${EnvContext.online}/user/UpdateProfil`, formData, config)
         .then((res) => {
           setProfil(res.data.profil);
         });
@@ -632,8 +629,8 @@ const Home = () => {
             searchInputRef={searchInputRef}
           />
           <div
-            className={`chatZone col-xs-12 col-md-7 ${
-              displayProfilBar ? "col-xl-7" : "col-xl-10"
+            className={`chatZone col-xs-12 col-md-8 ${
+              displayProfilBar ? "col-lg-7" : "col-lg-10"
             }  ${toggleZone ? "" : "d-none"} d-md-block`}
           >
             <div className="row h-100">
@@ -648,7 +645,7 @@ const Home = () => {
                           style={{
                             backgroundImage: `${
                               profil !== undefined
-                                ? `${EnvContext.local}/ressources/${profil})`
+                                ? `${EnvContext.online}/ressources/${profil})`
                                 : ""
                             }`,
                           }}
@@ -745,9 +742,10 @@ const Home = () => {
         onMuteVoice={muteVoice}
         onToggleVideoStream={removeVideoStream}
         onAddVideoStream={addVideoStream}
-        onRemove={remove}
         onTogVideo={togVieo}
+        exitSharingScreen={exitSharingScreen}
         onSharingScreen={SharingScreen}
+        onExitSharingScreen={onExitSharingScreen}
       />
       <div
         className={`offset-md-3 alert ${

@@ -4,6 +4,9 @@ import MicOffIcon from "@material-ui/icons/MicOff";
 import VideocamIcon from "@material-ui/icons/Videocam";
 import VideocamOffIcon from "@material-ui/icons/VideocamOff";
 import ScreenShareIcon from "@material-ui/icons/ScreenShare";
+import CallEndIcon from "@material-ui/icons/CallEnd";
+import Fab from "@material-ui/core/Fab";
+import StopScreenShareIcon from "@material-ui/icons/StopScreenShare";
 const Videocomponent = ({
   callBoard,
   phoneEnd,
@@ -20,6 +23,8 @@ const Videocomponent = ({
   onAddVideoStream,
   onTogVideo,
   onSharingScreen,
+  exitSharingScreen,
+  onExitSharingScreen,
 }) => {
   return (
     <div
@@ -72,28 +77,42 @@ const Videocomponent = ({
               width: "100%",
             }}
           >
-            <div className="ctrboard col-6 col-sm-6 col-md-3 col-lg-2">
+            <div className="ctrboard col-6 col-sm-7 col-md-5 col-lg-3">
               <div className="ctrboard-speakers">
-                <div className="icons" onClick={onMuteVoice}>
-                  <MicIcon />
-                </div>
-                <div className="icons" onClick={onMuteStreamVoice}>
-                  <i className={`fas fa-volume-${mute ? "up" : "mute"}`}></i>
+                <div className="" onClick={onMuteVoice}>
+                  <Fab color="primary" aria-label="add" size="medium">
+                    <MicIcon />
+                  </Fab>
                 </div>
               </div>
-              <div className="endbutton" onClick={onEnd}>
-                <img src={phoneEnd} alt="call" className="endbuttonImage" />
+              <div onClick={onEnd}>
+                <Fab color="secondary" aria-label="add">
+                  <CallEndIcon />
+                </Fab>
               </div>
               <div className="ctrboard-speakers">
-                <div className="toggle-video" onClick={onToggleVideoStream}>
-                  <VideocamIcon />
-                </div>
-                <div className="toggle-video" onClick={onSharingScreen}>
-                  <ScreenShareIcon />
+                <div onClick={onToggleVideoStream}>
+                  <Fab color="primary" aria-label="add" size="medium">
+                    {onTogVideo ? <VideocamOffIcon /> : <VideocamIcon />}
+                  </Fab>
                 </div>
               </div>
             </div>
           </div>
+          {!exitSharingScreen && (
+            <div onClick={onSharingScreen} className="sharing-screen">
+              <Fab color="primary" aria-label="add" size="medium">
+                <ScreenShareIcon />
+              </Fab>
+            </div>
+          )}
+          {exitSharingScreen && (
+            <div onClick={onExitSharingScreen} className="sharing-screen">
+              <Fab color="primary" aria-label="add" size="medium">
+                <StopScreenShareIcon />
+              </Fab>
+            </div>
+          )}
         </div>
       </div>
     </div>

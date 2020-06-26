@@ -48,7 +48,7 @@ const SignUp = () => {
     setConfirmPassword("");
     axios({
       method: "post",
-      url: `${EnvContext.local}/user/create/`,
+      url: `${EnvContext.online}/user/create/`,
       data: data,
     }).then((res) => {
       console.log(res);
