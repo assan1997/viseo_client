@@ -1,26 +1,26 @@
-import React, { useRef, useEffect, useState, useContext } from "react";
-import { Link } from "react-router-dom";
-import io from "socket.io-client";
-import Peer from "simple-peer";
-import axios from "axios";
-import phoneCall from "../../call.png";
-import phoneEnd from "../../phone-call-end.png";
-import Contactzone from "./Contactzone";
-import Videocomponent from "./Videocomponent";
-import Callboardcomponent from "./Callboardcomponent";
-import ChatzoneInput from "./ChatzoneInput";
-import ChatzoneHeader from "./ChatzoneHeader";
-import Chatzonebody from "./Chatzonebody";
+import React, { useRef, useEffect, useState, useContext } from 'react';
+import { Link } from 'react-router-dom';
+import io from 'socket.io-client';
+import Peer from 'simple-peer';
+import axios from 'axios';
+import phoneCall from '../../call.png';
+import phoneEnd from '../../phone-call-end.png';
+import Contactzone from './Contactzone';
+import Videocomponent from './Videocomponent';
+import Callboardcomponent from './Callboardcomponent';
+import ChatzoneInput from './ChatzoneInput';
+import ChatzoneHeader from './ChatzoneHeader';
+import Chatzonebody from './Chatzonebody';
 //import Navbar from "../partials_components/Navbar";
-import { animateScroll } from "react-scroll";
+import { animateScroll } from 'react-scroll';
 
-import Profilbar from "./Profilbar";
+import Profilbar from './Profilbar';
 //import CurrentInfoBar from "./CurrentInfoBar";
-import sound from "../../me-too.mp3";
-import callsound from "../../skype-4431.mp3";
-import PersonOutlineIcon from "@material-ui/icons/PersonOutline";
-import Env from "../../configContext";
-const emeoji = require("emojis-list");
+import sound from '../../me-too.mp3';
+import callsound from '../../skype-4431.mp3';
+import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
+import Env from '../../configContext';
+const emeoji = require('emojis-list');
 const Home = () => {
   const EnvContext = useContext(Env);
   const socket = io(`${EnvContext.online}`);
@@ -30,12 +30,12 @@ const Home = () => {
   //let notif = new Audio(sound);
   let audioRef = useRef(null);
   let searchInputRef = useRef(null);
-
+  const inputRef = useRef(null);
   const [users, setUsers] = useState([]);
   const [usersFilter, setUserFilter] = useState([]);
   //const [usersOnline, setUsersOnline] = useState([]);
   const [contactList, setContactList] = useState([]);
-  const [init, setInit] = useState("");
+  const [init, setInit] = useState('');
   const [peer, setPeer] = useState();
   const [receivePeer, setReceivePeer] = useState();
   const [peerSignal, setPeerSignal] = useState();
@@ -57,11 +57,11 @@ const Home = () => {
   const [inputFocus, setInputFocus] = useState(false);
   const [displayMessage, setDisplayMessage] = useState(false);
   const [currentUser, setCurrentUser] = useState([]);
-  const [messageContent, setMessageContent] = useState("");
+  const [messageContent, setMessageContent] = useState('');
   const [messages, setMessages] = useState([]);
   const [displayProfilBar, setDisplayProfilBar] = useState(false);
   const [emitSound, setEmitSound] = useState(false);
-  const inputRef = useRef(null);
+
   const [displayOptions, setDisplayOptions] = useState(false);
   const [updateProfil, setUpdateProfil] = useState();
   const [profil, setProfil] = useState();
@@ -79,7 +79,7 @@ const Home = () => {
 
   useEffect(() => {
     axios({
-      method: "get",
+      method: 'get',
       url: `${EnvContext.online}/user/all/`,
     }).then((res) => {
       if (res.data !== null) setUsers(res.data);
@@ -87,13 +87,13 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    if (profil === undefined) setProfil(sessionStorage.getItem("profil"));
+    if (profil === undefined) setProfil(sessionStorage.getItem('profil'));
   }, [profil]);
   useEffect(() => {
     let data = {};
-    data.user = sessionStorage.getItem("userId");
+    data.user = sessionStorage.getItem('userId');
     axios({
-      method: "post",
+      method: 'post',
       url: `${EnvContext.online}/contact/all/`,
       data: data,
     }).then((res) => {
@@ -102,9 +102,9 @@ const Home = () => {
   }, []);
   useEffect(() => {
     let data = {};
-    data.user = sessionStorage.getItem("userId");
+    data.user = sessionStorage.getItem('userId');
     axios({
-      method: "post",
+      method: 'post',
       url: `${EnvContext.online}/messages/all`,
       data: data,
     }).then((res) => {
@@ -117,29 +117,29 @@ const Home = () => {
   // CET EFFET PERMET DE CONNECTER L'UTILISATEUR AU SERVER SOCKET.IO
   useEffect(() => {
     if (
-      sessionStorage.getItem("user") &&
-      sessionStorage.getItem("user") !== "null"
+      sessionStorage.getItem('user') &&
+      sessionStorage.getItem('user') !== 'null'
     ) {
       let userInfo = {};
-      userInfo.username = sessionStorage.getItem("user");
-      userInfo.userId = sessionStorage.getItem("userId");
-      userInfo.room = `${sessionStorage.getItem("user")}_call_room`;
-      socket.emit("session", { client: userInfo, contacts: contactList });
+      userInfo.username = sessionStorage.getItem('user');
+      userInfo.userId = sessionStorage.getItem('userId');
+      userInfo.room = `${sessionStorage.getItem('user')}_call_room`;
+      socket.emit('session', { client: userInfo, contacts: contactList });
     }
   }, []);
-  window.addEventListener("load", function () {
+  window.addEventListener('load', function () {
     if (
-      sessionStorage.getItem("user") &&
-      sessionStorage.getItem("user") !== "null"
+      sessionStorage.getItem('user') &&
+      sessionStorage.getItem('user') !== 'null'
     ) {
-      socket.emit("reload", { user: sessionStorage.getItem("user") });
+      socket.emit('reload', { user: sessionStorage.getItem('user') });
     }
   });
   const Reload = () => {
     window.location.reload();
   };
-  socket.on("call-signal", (data) => {
-    if (data.signalType == "call") {
+  socket.on('call-signal', (data) => {
+    if (data.signalType == 'call') {
       audioRef.current.src = callsound;
       audioRef.current.play();
       setCallControlBoard(true);
@@ -151,36 +151,36 @@ const Home = () => {
       setCallType(data.callType);
     }
   });
-  socket.on("AcceptCall", (data) => {
+  socket.on('AcceptCall', (data) => {
     setTransmission(data);
   });
 
-  socket.on("call-event", function (data) {
+  socket.on('call-event', function (data) {
     setCallEvent(data);
   });
-  socket.on("initEnd", function (data) {
-    setCallEvent(data);
-    setTimeout(() => {
-      setEnd(true);
-    }, 2000);
-  });
-
-  socket.on("peerEnd", function (data) {
+  socket.on('initEnd', function (data) {
     setCallEvent(data);
     setTimeout(() => {
       setEnd(true);
     }, 2000);
   });
 
-  socket.on("removeVideo", function () {
-    v2Ref.current.classList.toggle("none");
+  socket.on('peerEnd', function (data) {
+    setCallEvent(data);
+    setTimeout(() => {
+      setEnd(true);
+    }, 2000);
   });
 
-  socket.on("aborted", function () {
-    alert("aborted");
+  socket.on('removeVideo', function () {
+    v2Ref.current.classList.toggle('none');
+  });
+
+  socket.on('aborted', function () {
+    alert('aborted');
     setEnd(true);
   });
-  socket.on("updateMessages", function (data) {
+  socket.on('updateMessages', function (data) {
     console.log(data);
     setNotifMessage(data);
   });
@@ -192,7 +192,7 @@ const Home = () => {
     if (initPeer !== undefined && peerSignal !== undefined) {
       initPeer.signal(peerSignal);
       console.log(peerSignal);
-      initPeer.on("stream", function (stream) {
+      initPeer.on('stream', function (stream) {
         setInitStream(stream);
         window.URL = stream;
         if (window.URL) {
@@ -291,9 +291,9 @@ const Home = () => {
     console.log(e.currentTarget.id);
     let callData = {
       peer: e.currentTarget.id,
-      init: sessionStorage.getItem("userId"),
-      initProfil: sessionStorage.getItem("profil"),
-      callType: "video-call",
+      init: sessionStorage.getItem('userId'),
+      initProfil: sessionStorage.getItem('profil'),
+      callType: 'video-call',
     };
     navigator.getUserMedia(
       { video: true, audio: true },
@@ -311,13 +311,13 @@ const Home = () => {
         setVideoTrack(stream.getTracks()[1]);
         peer.addTrack(stream.getTracks()[0], stream);
         peer.addTrack(stream.getTracks()[1], stream);
-        peer.on("signal", function (data) {
+        peer.on('signal', function (data) {
           callData.signal = data;
           if (!callSession) {
-            socket.emit("call", { ...callData, signalType: "call" });
+            socket.emit('call', { ...callData, signalType: 'call' });
             setCallSession(true);
           } else {
-            socket.emit("call", { ...callData, signalType: "nocall" });
+            socket.emit('call', { ...callData, signalType: 'nocall' });
           }
         });
         setInitPeer(peer);
@@ -331,7 +331,7 @@ const Home = () => {
    * CETTE FONCTION PERMET DE REPONDRE A UN APPEL
    */
   const AcceptCall = () => {
-    audioRef.current.src = "";
+    audioRef.current.src = '';
     navigator.getUserMedia(
       { video: true, audio: false },
       function (stream) {
@@ -341,15 +341,15 @@ const Home = () => {
         v1Ref.current.muted = true;
         let peer = InitPeer(false);
         peer.addStream(stream);
-        peer.on("signal", function (data) {
+        peer.on('signal', function (data) {
           let callData = {
             signal: data,
             init: init,
-            peer: sessionStorage.getItem("userId"),
+            peer: sessionStorage.getItem('userId'),
           };
-          socket.emit("ok", callData);
+          socket.emit('ok', callData);
         });
-        peer.on("stream", function (stream) {
+        peer.on('stream', function (stream) {
           v2Ref.current.srcObject = stream;
         });
         peer.signal(initSignal);
@@ -366,7 +366,7 @@ const Home = () => {
   const SharingScreen = async () => {
     let captureStream = await navigator.mediaDevices.getDisplayMedia({
       video: {
-        cursor: "always",
+        cursor: 'always',
       },
       audio: false,
     });
@@ -391,17 +391,17 @@ const Home = () => {
 
   const removeVideoStream = () => {
     setTogVideo(!togVieo);
-    socket.emit("removeVideo", {
+    socket.emit('removeVideo', {
       peer: initName !== undefined ? init : peer,
-      me: sessionStorage.getItem("userId"),
+      me: sessionStorage.getItem('userId'),
       init: initName,
     });
   };
 
   const addVideoStream = () => {
-    socket.emit("addVideo", {
+    socket.emit('addVideo', {
       peer: initName !== undefined ? init : peer,
-      me: sessionStorage.getItem("userId"),
+      me: sessionStorage.getItem('userId'),
       init: initName,
     });
   };
@@ -412,7 +412,7 @@ const Home = () => {
   const addContact = (event) => {
     let data = {};
     let exist = contactList.find((e) => e._id === event.currentTarget.id);
-    data.user_pseudo = sessionStorage.getItem("userId");
+    data.user_pseudo = sessionStorage.getItem('userId');
     data.pseudo = event.currentTarget.id;
     if (exist !== undefined) {
       setContactExist(`${exist.login} est déja dans votre liste de contacts`);
@@ -421,7 +421,7 @@ const Home = () => {
       }, 3000);
     } else {
       axios({
-        method: "post",
+        method: 'post',
         url: `${EnvContext.online}/user/addNew`,
         data: data,
       }).then((res) => {
@@ -437,7 +437,7 @@ const Home = () => {
       });
     }
   };
-  if (callEvent !== null && callEvent.status === "failed") {
+  if (callEvent !== null && callEvent.status === 'failed') {
     setTimeout(() => {
       setEnd(true);
     }, 5000);
@@ -447,15 +447,15 @@ const Home = () => {
       init: init,
       peer: peer,
     };
-    if (callEvent !== null && callEvent.status === "failed") {
+    if (callEvent !== null && callEvent.status === 'failed') {
       setEnd(true);
     } else {
-      socket.emit("end", clients);
+      socket.emit('end', clients);
     }
   };
   const Denied = () => {
-    audioRef.current.src = "";
-    socket.emit("denied", { peer: peer, init: init });
+    audioRef.current.src = '';
+    socket.emit('denied', { peer: peer, init: init });
   };
   const onResize = () => {
     setResize(!resize);
@@ -474,12 +474,12 @@ const Home = () => {
    * @param {*} e l'input de recherche
    */
   const findUser = (e) => {
-    if (e.target.value !== "") {
+    if (e.target.value !== '') {
       setUserFilter(
         users.filter(
           (user) =>
             user.login.includes(e.target.value) &&
-            user._id !== sessionStorage.getItem("userId")
+            user._id !== sessionStorage.getItem('userId')
         )
       );
       setDisplayMessage(false);
@@ -525,20 +525,20 @@ const Home = () => {
   const sendMessage = () => {
     let message = {
       header: {
-        emitter: sessionStorage.getItem("userId"),
+        emitter: sessionStorage.getItem('userId'),
         receiver: currentUser[0]
           ? currentUser[0].emitter !== undefined
-            ? currentUser[0].emitter._id === sessionStorage.getItem("userId")
+            ? currentUser[0].emitter._id === sessionStorage.getItem('userId')
               ? currentUser[0].receiver._id
               : currentUser[0].emitter._id
             : currentUser[0]
-          : "",
+          : '',
       },
       content: messageContent,
       time: new Date(),
     };
-    socket.emit("sendMessage", message);
-    setMessageContent("");
+    socket.emit('sendMessage', message);
+    setMessageContent('');
   };
   useEffect(() => {
     scrollToBottom();
@@ -546,8 +546,8 @@ const Home = () => {
   const scrollToBottom = () => {
     animateScroll.scrollToBottom({
       duration: 200,
-      smooth: "easeInOutQuint",
-      containerId: "ContainerElementID",
+      smooth: 'easeInOutQuint',
+      containerId: 'ContainerElementID',
     });
   };
   const toggleProfilBar = () => {
@@ -565,7 +565,7 @@ const Home = () => {
   };
   const onDeleteMessage = async (e) => {
     let data = {
-      user: sessionStorage.getItem("userId"),
+      user: sessionStorage.getItem('userId'),
       msg: e.currentTarget.id,
       dialog_id: currentUser.item._id,
     };
@@ -579,21 +579,21 @@ const Home = () => {
     inputRef.current.click();
   };
   const Logout = () => {
-    socket.emit("session-out", {
-      user: sessionStorage.getItem("user"),
-      room: `${sessionStorage.getItem("user")}_call_room`,
+    socket.emit('session-out', {
+      user: sessionStorage.getItem('user'),
+      room: `${sessionStorage.getItem('user')}_call_room`,
     });
-    sessionStorage.setItem("user", "null");
-    sessionStorage.setItem("profil", "null");
-    sessionStorage.setItem("userId", "null");
+    sessionStorage.setItem('user', 'null');
+    sessionStorage.setItem('profil', 'null');
+    sessionStorage.setItem('userId', 'null');
   };
   useEffect(() => {
     if (updateProfil !== undefined) {
       const formData = new FormData();
-      formData.append("profil", updateProfil[0]);
-      formData.append("user", sessionStorage.getItem("userId"));
+      formData.append('profil', updateProfil[0]);
+      formData.append('user', sessionStorage.getItem('userId'));
       const config = {
-        headers: { "content-type": "multipart/form-data" },
+        headers: { 'content-type': 'multipart/form-data' },
       };
       axios
         .post(`${EnvContext.online}/user/UpdateProfil`, formData, config)
@@ -604,13 +604,13 @@ const Home = () => {
   }, [updateProfil]);
 
   useEffect(() => {
-    setProfil(sessionStorage.getItem("profil"));
+    setProfil(sessionStorage.getItem('profil'));
   }, []);
   return (
-    <div className="row main_home">
+    <div className='row main_home'>
       <audio hidden ref={audioRef} loop></audio>
-      <div className="col-12  h-100  ">
-        <div className="row h-100">
+      <div className='col-12  h-100  '>
+        <div className='row h-100'>
           <Contactzone
             usersFilter={usersFilter}
             findUser={findUser}
@@ -630,38 +630,38 @@ const Home = () => {
           />
           <div
             className={`chatZone col-xs-12 col-md-8 ${
-              displayProfilBar ? "col-lg-7" : "col-lg-10"
-            }  ${toggleZone ? "" : "d-none"} d-md-block`}
+              displayProfilBar ? 'col-xl-7' : 'col-xl-9'
+            }  ${toggleZone ? '' : 'd-none'} d-md-block`}
           >
-            <div className="row h-100">
-              <div className="col-12 ">
-                <div className="row h-100">
+            <div className='row h-100'>
+              <div className='col-12 '>
+                <div className='row h-100'>
                   {currentUser.length === 0 && (
-                    <div className="currentUserOverlay">
-                      <h1 className="title-logo">Viseo Chanel</h1>
-                      {profil !== "undefined" && (
+                    <div className='currentUserOverlay'>
+                      <h1 className='title-logo'>Viseo Chanel</h1>
+                      {profil !== 'undefined' && (
                         <div
-                          className="welcome-profil"
+                          className='welcome-profil'
                           style={{
                             backgroundImage: `${
                               profil !== undefined
                                 ? `${EnvContext.online}/ressources/${profil})`
-                                : ""
+                                : ''
                             }`,
                           }}
                         ></div>
                       )}
-                      {profil === "undefined" && (
-                        <div className="welcome-profil">
-                          <PersonOutlineIcon size="large" />
+                      {profil === 'undefined' && (
+                        <div className='welcome-profil'>
+                          <PersonOutlineIcon size='large' />
                         </div>
                       )}
-                      <h4>Bienvenue , {sessionStorage.getItem("user")}</h4>
+                      <h4>Bienvenue , {sessionStorage.getItem('user')}</h4>
                       <div>
                         <Link
-                          to="/sign-in"
+                          to='/sign-in'
                           onClick={Logout}
-                          className="nav-link"
+                          className='nav-link'
                         >
                           <h6>Se déconnecter</h6>
                         </Link>
@@ -669,7 +669,7 @@ const Home = () => {
                       <h6>v1.0.0</h6>
                     </div>
                   )}
-                  <div className="col-12" style={{ height: "10%" }}>
+                  <div className='col-12' style={{ height: '10%' }}>
                     <ChatzoneHeader
                       changeZone={exitChatZone}
                       currentUser={currentUser}
@@ -679,16 +679,16 @@ const Home = () => {
                     />
                   </div>
                   <div
-                    id="ContainerElementID"
-                    className="col-12"
+                    id='ContainerElementID'
+                    className='col-12'
                     style={{
-                      height: "80%",
+                      height: '80%',
                       overflow: `${
-                        currentUser.length !== 0 ? "scroll" : "none"
+                        currentUser.length !== 0 ? 'scroll' : 'none'
                       }`,
-                      paddingTop: "7%",
-                      background: "#ECE5DD",
-                      position: "relative",
+                      paddingTop: '7%',
+                      background: 'whitesmoke**',
+                      position: 'relative',
                     }}
                   >
                     <Chatzonebody
@@ -699,10 +699,10 @@ const Home = () => {
                     />
                   </div>
                   <div
-                    className="col-12"
+                    className='col-12'
                     style={{
-                      height: "10%",
-                      background: "whitesmoke",
+                      height: '10%',
+                      background: 'whitesmoke',
                     }}
                   >
                     <ChatzoneInput
@@ -724,6 +724,7 @@ const Home = () => {
             inputRef={inputRef}
             onFileAdded={onFileAdded}
             profil={profil}
+            onToggleProfilBar={toggleProfilBar}
           />
         </div>
       </div>
@@ -749,22 +750,22 @@ const Home = () => {
       />
       <div
         className={`offset-md-3 alert ${
-          callEvent !== null && callEvent.status === "failed"
-            ? "alert-danger"
-            : "alert-primary"
+          callEvent !== null && callEvent.status === 'failed'
+            ? 'alert-danger'
+            : 'alert-primary'
         }`}
         style={{
-          height: "50px",
-          left: "25%",
-          width: "50%",
-          position: "fixed",
+          height: '50px',
+          left: '25%',
+          width: '50%',
+          position: 'fixed',
           zIndex: 100000,
-          top: `${callEvent !== null ? "0" : "-60px"}`,
-          fontSize: "0.7em",
+          top: `${callEvent !== null ? '0' : '-60px'}`,
+          fontSize: '0.7em',
         }}
       >
-        {callEvent !== null ? `${callEvent.msg} ...` : ""}
-      </div>{" "}
+        {callEvent !== null ? `${callEvent.msg} ...` : ''}
+      </div>{' '}
       <Callboardcomponent
         callControlBoard={callControlBoard}
         AcceptCall={AcceptCall}
