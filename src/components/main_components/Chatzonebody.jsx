@@ -7,9 +7,9 @@ const Chatzonebody = ({ currentUser, onDeleteMessage }) => {
     profil: sessionStorage.getItem("profil"),
   };
   return (
-    <div className="row h-100" >
+    <div className="row h-100">
       <div
-        className="col-12 col-xl-8 offset-xl-2"
+        className="col-12 col-xl-8 offset-xl-2 h-100"
         style={{ position: "absolute" }}
       >
         {currentUser.length !== 0 &&

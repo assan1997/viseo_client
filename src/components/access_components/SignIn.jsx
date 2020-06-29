@@ -35,7 +35,7 @@ const SignIn = () => {
     setLoader(true);
     axios({
       method: "post",
-      url: `${EnvContext.online}/user/connect`,
+      url: `${EnvContext.local}/user/connect`,
       data: data,
     }).then((res) => {
       if (res.data.err !== undefined) {
