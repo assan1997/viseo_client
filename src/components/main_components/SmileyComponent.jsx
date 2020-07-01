@@ -1,16 +1,16 @@
-import React from "react";
-const emoji = require("emojis-list");
+import React from 'react';
+const emoji = require('emojis-list');
 const SmileyComponent = ({ onUseEmoji }) => {
   return (
-    <div className="smiley">
+    <div>
       {emoji.map((e, index) => (
         <span
           key={index}
           name={e}
           onClick={onUseEmoji}
-          style={{ cursor: "pointer", margin: "5px" }}
+          style={{ cursor: 'pointer', margin: '5px' }}
         >
-          {e}
+          <span style={{ fontSize: '2em' }}>{e}</span>
         </span>
       ))}
     </div>
