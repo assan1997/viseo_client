@@ -321,7 +321,7 @@ code {
   outline: none;
 }
 .contact_zone_options {
-  background: rgb(75, 103, 192);
+  background: rgba(0, 0, 0, 0.557);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -374,7 +374,7 @@ code {
 .chatitem-away {
   float: left;
   clear: both;
-  border-radius: 3px;
+  border-radius: 4px;
   border-top-left-radius: 0;
   box-shadow: 0.7px 0.7px 0.7px 0.7px rgb(209, 208, 208);
   padding-top: 2.5px;
@@ -389,7 +389,7 @@ code {
 .chatitem-home {
   float: right;
   clear: both;
-  border-radius: 3px;
+  border-radius: 4px;
   border-top-right-radius: 0;
   text-align: left;
   box-shadow: 0.7px 0.7px 0.7px 0.7px rgb(202, 200, 200);
@@ -430,7 +430,7 @@ code {
   visibility: hidden;
 }
 
-.chatitem-home::after {
+/* .chatitem-home::after {
   content: " ";
   position: absolute;
   right: -8px;
@@ -451,7 +451,7 @@ code {
   border-left: 0px solid white;
   border-right: 8px solid white;
   border-bottom: 8px solid transparent;
-}
+} */
 
 .currentUserOverlay {
   position: absolute;
