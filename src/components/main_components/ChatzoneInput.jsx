@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
-import SendIcon from "@material-ui/icons/Send";
-import RecordVoiceOverIcon from "@material-ui/icons/RecordVoiceOver";
-import Fab from "@material-ui/core/Fab";
-import MicIcon from "@material-ui/icons/Mic";
-import AttachmentIcon from "@material-ui/icons/Attachment";
-import InsertEmoticonIcon from "@material-ui/icons/InsertEmoticon";
-import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+import React, { useState, useEffect, useRef } from 'react';
+import SendIcon from '@material-ui/icons/Send';
+import RecordVoiceOverIcon from '@material-ui/icons/RecordVoiceOver';
+import Fab from '@material-ui/core/Fab';
+import MicIcon from '@material-ui/icons/Mic';
+import AttachmentIcon from '@material-ui/icons/Attachment';
+import InsertEmoticonIcon from '@material-ui/icons/InsertEmoticon';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 
 const ChatzoneInput = ({
   manageMessageInput,
@@ -35,9 +35,8 @@ const ChatzoneInput = ({
           <div
             className='col-12 contact_zone_input h-100'
             style={{
-              display: "flex",
-              alignItems: "center",
-              backgroundColor: "rgb(216, 214, 214)",
+              display: 'flex',
+              alignItems: 'center',
             }}
           >
             <div className='col-xl-8 offset-xl-2 h-100'>
@@ -45,24 +44,24 @@ const ChatzoneInput = ({
                 <div
                   className='col-8'
                   style={{
-                    position: "relative",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
+                    position: 'relative',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
                   }}
                 >
                   <input
                     style={{
-                      width: "100%",
-                      borderRadius: "100px",
-                      outline: "none",
-                      border: "none",
-                      color: "gray",
-                      height: "50px",
-                      paddingLeft: "20px",
-                      paddingRight: "50px",
+                      width: '100%',
+                      borderRadius: '100px',
+                      outline: 'none',
+                      border: 'none',
+                      color: 'gray',
+                      height: '50px',
+                      paddingLeft: '20px',
+                      paddingRight: '50px',
                     }}
-                    placeholder={"Taper un message"}
+                    placeholder={'Taper un message'}
                     value={messageContent}
                     onChange={manageMessageInput}
                     onKeyPress={sendPressEnter}
@@ -70,28 +69,28 @@ const ChatzoneInput = ({
                   />
                   <span
                     style={{
-                      position: "absolute",
-                      right: "30px",
-                      transition: "all ease-in-out .3s",
+                      position: 'absolute',
+                      right: '30px',
+                      transition: 'all ease-in-out .3s',
                       color: `${
-                        displaySmileyZone ? "rgb(75, 103, 192)" : "silver"
+                        displaySmileyZone ? 'rgb(75, 103, 192)' : 'silver'
                       }`,
                     }}
                   >
                     <InsertEmoticonIcon
                       onClick={onDisplaySmiley}
-                      style={{ cursor: "pointer" }}
+                      style={{ cursor: 'pointer' }}
                     />
                   </span>
                 </div>
                 <div
                   className='col-4 col-lg-2 h-100'
                   style={{
-                    height: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    position: "relative",
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    position: 'relative',
                   }}
                 >
                   {messageContent.length !== 0 && (
@@ -99,9 +98,9 @@ const ChatzoneInput = ({
                       ref={sendBtnRef}
                       onClick={() => onSendMessage()}
                       style={{
-                        color: "rgb(75, 103, 192)",
-                        background: "transparent",
-                        border: "none",
+                        color: 'rgb(75, 103, 192)',
+                        background: 'transparent',
+                        border: 'none',
                       }}
                       size='small'
                     >
@@ -112,9 +111,9 @@ const ChatzoneInput = ({
                     <Fab
                       ref={sendBtnRef}
                       style={{
-                        color: "rgb(75, 103, 192)",
-                        background: "transparent",
-                        border: "none",
+                        color: 'rgb(75, 103, 192)',
+                        background: 'transparent',
+                        border: 'none',
                       }}
                       size='small'
                     >
@@ -123,9 +122,9 @@ const ChatzoneInput = ({
                   )}
                   <Fab
                     style={{
-                      color: "rgb(75, 103, 192)",
-                      background: "transparent",
-                      border: "none",
+                      color: 'rgb(75, 103, 192)',
+                      background: 'transparent',
+                      border: 'none',
                     }}
                     size='small'
                     onClick={() => setMoreOptions(!moreOptions)}
@@ -134,25 +133,25 @@ const ChatzoneInput = ({
                   </Fab>
                   <div
                     style={{
-                      position: "absolute",
-                      transition: "all ease-in-out .3s",
-                      padding: "3px",
-                      right: "0px",
-                      bottom: `${moreOptions ? "70px" : "-150px"}`,
-                      height: "150px",
-                      backgroundColor: "silver",
-                      borderRadius: "100px",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      alignItems: "center",
+                      position: 'absolute',
+                      transition: 'all ease-in-out .3s',
+                      padding: '3px',
+                      right: '0px',
+                      bottom: `${moreOptions ? '70px' : '-150px'}`,
+                      height: '150px',
+                      backgroundColor: 'silver',
+                      borderRadius: '100px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      alignItems: 'center',
                     }}
                   >
                     <Fab
                       ref={sendBtnRef}
                       style={{
-                        color: "rgb(75, 103, 192)",
-                        border: "none",
+                        color: 'rgb(75, 103, 192)',
+                        border: 'none',
                       }}
                       size='small'
                     >
@@ -161,8 +160,8 @@ const ChatzoneInput = ({
                     <Fab
                       ref={sendBtnRef}
                       style={{
-                        border: "none",
-                        color: "rgb(75, 103, 192)",
+                        border: 'none',
+                        color: 'rgb(75, 103, 192)',
                       }}
                       size='small'
                     >
