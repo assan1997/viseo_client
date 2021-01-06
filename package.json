@@ -9,7 +9,7 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "animated-emojis": "^1.0.1",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "emojis-list": "^3.0.0",
     "moment": "^2.26.0",
     "moment-timezone": "^0.5.28",
